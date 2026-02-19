@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import SiteHeader from "./components/SiteHeader";
 import { JSX } from "react";
@@ -37,7 +36,7 @@ export default function Home() {
       icon: <FontAwesomeIcon icon={faBook} size="lg" className="text-indigo-600" />,
       title: "Class Syllabus",
       description: "Official course syllabus with objectives, weekly schedule, grading policy, required materials, and key dates. Review the syllabus online.",
-      href: "#/syllabus",
+      href: "/syllabus",
       buttonLabel: "Review Syllabus",
     },
     {
