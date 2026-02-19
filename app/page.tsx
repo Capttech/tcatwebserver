@@ -118,6 +118,49 @@ export default function Home() {
         <SiteHeader />
 
         <section className="mt-6 flex flex-col gap-6">
+          <article className="p-6 rounded-lg bg-white/60 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800">
+            <div className="flex items-start justify-between">
+              <div className="flex items-start gap-4">
+                <div className="w-8 h-8 text-indigo-600 flex-shrink-0">
+                  <FontAwesomeIcon icon={faQuestion} size="lg" />
+                </div>
+                <div>
+                  <h2 className="text-2xl font-semibold">Trial Test — Core 1</h2>
+                  <p className="mt-2 text-zinc-700 dark:text-zinc-300 max-w-[60ch]">
+                    Take a timed Core 1 trial test to assess your readiness for Core 1 topics.
+                  </p>
+                </div>
+              </div>
+
+              <div className="ml-6 flex-shrink-0">
+                <Link href="/quizzes/core1-trial" className={getButtonClass("trial-core1")} aria-label="Start Core 1 trial">
+                  Start Core 1
+                </Link>
+              </div>
+            </div>
+          </article>
+
+          <article className="p-6 rounded-lg bg-white/60 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800">
+            <div className="flex items-start justify-between">
+              <div className="flex items-start gap-4">
+                <div className="w-8 h-8 text-indigo-600 flex-shrink-0">
+                  <FontAwesomeIcon icon={faQuestion} size="lg" />
+                </div>
+                <div>
+                  <h2 className="text-2xl font-semibold">Trial Test — Core 2</h2>
+                  <p className="mt-2 text-zinc-700 dark:text-zinc-300 max-w-[60ch]">
+                    Take a timed Core 2 trial test to assess your readiness for Core 2 topics.
+                  </p>
+                </div>
+              </div>
+
+              <div className="ml-6 flex-shrink-0">
+                <Link href="/quizzes/core2-trial" className={getButtonClass("trial-core2")} aria-label="Start Core 2 trial">
+                  Start Core 2
+                </Link>
+              </div>
+            </div>
+          </article>
           {options.map((opt, idx) => (
             <article
               key={opt.id}
