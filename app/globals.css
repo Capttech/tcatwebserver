@@ -24,3 +24,87 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Card styles and subtle animations for option tiles */
+.option-card {
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(16,24,40,0.06);
+  transition: transform 240ms ease, box-shadow 240ms ease, filter 240ms ease;
+  will-change: transform, box-shadow;
+  animation: fadeUp 420ms ease forwards;
+}
+
+/* Layered gradients: base (::before) and hover overlay (::after) which cross-fade */
+.option-card::before,
+.option-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  transition: opacity 260ms ease, transform 260ms ease;
+}
+
+.option-card::before {
+  background: linear-gradient(180deg, rgba(255,255,255,0.86), rgba(245,247,255,0.9));
+  opacity: 1;
+}
+
+.option-card::after {
+  background: linear-gradient(200deg, rgba(238,242,255,0.95), rgba(221,234,255,0.82));
+  opacity: 0;
+  transform: scale(1.02);
+}
+
+/* Ensure card content sits above the gradient layers */
+.option-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+.option-card:hover {
+  transform: translateY(-6px) scale(1.01);
+  box-shadow: 0 20px 48px rgba(2,6,23,0.14);
+}
+
+/* On hover cross-fade to the overlay gradient for a smooth color shift */
+.option-card:hover::after {
+  opacity: 1;
+  transform: scale(1);
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .option-card::before {
+    background: linear-gradient(180deg, rgba(11,11,11,0.7), rgba(18,24,34,0.75));
+    box-shadow: 0 10px 30px rgba(2,6,23,0.6);
+  }
+  .option-card::after {
+    background: linear-gradient(200deg, rgba(6,10,20,0.75), rgba(12,18,28,0.85));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .option-card {
+    transition: none;
+    animation: none;
+    transform: none !important;
+  }
+  .option-card::before,
+  .option-card::after {
+    transition: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
