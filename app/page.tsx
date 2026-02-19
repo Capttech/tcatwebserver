@@ -72,12 +72,29 @@ export default function Home() {
       buttonLabel: "Start Quiz",
     },
     {
+      id: "required-materials",
+      icon: <FontAwesomeIcon icon={faBook} size="lg" className="text-indigo-600" />,
+      title: "Required materials",
+      description:
+        "List of required textbooks, tools, and consumables needed for class activities. Ensure you have these items before attending hands-on sessions.",
+      href: "#/required-materials",
+      buttonLabel: "View Materials",
+    },
+    {
       id: "tickets",
       icon: <FontAwesomeIcon icon={faTicket} size="lg" className="text-indigo-600" />,
-      title: "Tickets",
+      title: "Ticket Edicate",
       description: "Request equipment support or sign out for off-site tasks. Staff can log departures and confirm returns for accountability.",
       href: "/tickets",
       buttonLabel: "Manage Tickets",
+    },
+    {
+      id: "ticket-submission",
+      icon: <FontAwesomeIcon icon={faClipboardList} size="lg" className="text-indigo-600" />,
+      title: "Ticket Submission",
+      description: "Students: log what you did while working on a ticket and summarize how you resolved it. Include steps taken, troubleshooting details, and final outcome to help staff review and learn.",
+      href: "/tickets",
+      buttonLabel: "Submit Ticket",
     },
     {
       id: "safety",
