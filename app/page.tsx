@@ -128,6 +128,27 @@ export default function Home() {
             </article>
           ))}
         </section>
+
+        <section className="mt-8">
+          <div className="p-6 rounded-lg bg-white/60 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800">
+            <div className="flex items-start justify-between">
+              <div>
+                <h2 className="text-2xl font-semibold">Classroom Safety</h2>
+                <p className="mt-2 text-zinc-700 dark:text-zinc-300">
+                  Your safety is our top priority. Please review lab rules, required personal protective equipment (PPE), emergency
+                  procedures, and reporting protocols before participating in hands-on activities. Familiarize yourself with instructor
+                  expectations and follow posted guidelines to help keep everyone safe.
+                </p>
+              </div>
+
+              <div className="ml-6 flex-shrink-0">
+                <Link href="/safety" className="inline-flex items-center rounded-md bg-indigo-600 px-4 py-2 text-white hover:bg-indigo-700 transition-colors">
+                  Read Safety Info
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
       </div>
     </div>
   );
