@@ -38,6 +38,25 @@ export default function OnboardingPage(): JSX.Element {
           </section>
 
           <section>
+            <h2 className="text-2xl font-semibold">Login to Microsoft Teams</h2>
+            <p className="mt-2">
+              As we get started, please take a few minutes to review the links below. These brief tutorials will help you get comfortable using Microsoft Teams, the primary platform we’ll be using for class communication, assignments, and resources.
+            </p>
+
+            <ul className="list-disc ml-6 mt-2 space-y-1">
+              <li className="mt-2">
+                <a href="https://www.microsoft.com/en-us/microsoft-teams/log-in" target="_blank" rel="noreferrer" className="text-indigo-600 underline">Sign in to Microsoft Teams</a>
+              </li>
+              <li>
+                <a href="https://www.youtube.com/watch?v=voZE-xwK1gE" target="_blank" rel="noreferrer" className="text-indigo-600 underline">Teams Training in 10 Minutes (YouTube)</a>
+              </li>
+              <li>
+                <a href="https://support.microsoft.com/en-us/teams" target="_blank" rel="noreferrer" className="text-indigo-600 underline">Microsoft Teams Full Video Training (Beginner to Advanced)</a>
+              </li>
+            </ul>
+          </section>
+
+          <section>
             <h2 className="text-2xl font-semibold">Create an Account on CompTIA</h2>
             <p className="mt-2">
               If the course requires CompTIA resources or certification tracking, create an account on the CompTIA portal. Use a reliable email address, remember your credentials, and verify your account if prompted. Create your CompTIA account here: <a href="https://login.comptia.org/home" target="_blank" rel="noreferrer" className="text-indigo-600 underline">CompTIA Sign Up</a>.
