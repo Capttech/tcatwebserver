@@ -1,15 +1,13 @@
 import React from 'react'
 import SafetySection from './components/SafetySection'
 import Callout from './components/Callout'
+import SiteHeader from '../components/SiteHeader'
 
 export default function Page() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-[#071019] via-[#0b1220] to-[#071633] text-white flex items-start justify-center py-16 px-6">
       <div className="max-w-3xl w-full">
-        <header className="text-center mb-6">
-          <h1 className="text-4xl font-extrabold mb-2 text-white drop-shadow-lg">Class Safety</h1>
-          <p className="text-lg text-sky-100">Guidelines and procedures to keep our classes safe and welcoming for everyone.</p>
-        </header>
+        <SiteHeader title="Class Safety" subtitle="Guidelines and procedures to keep our classes safe and welcoming for everyone." className="mb-6" />
 
         <article>
           <SafetySection id="lab-safety" title="Lab Safety" lead={null}>
