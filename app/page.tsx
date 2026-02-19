@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import SiteHeader from "./components/SiteHeader";
 import { JSX } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -77,7 +78,7 @@ export default function Home() {
       title: "Required materials",
       description:
         "List of required textbooks, tools, and consumables needed for class activities. Ensure you have these items before attending hands-on sessions.",
-      href: "#/required-materials",
+      href: "/required-materials",
       buttonLabel: "View Materials",
     },
     {
@@ -114,15 +115,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-indigo-50 dark:from-[#021028] dark:via-[#02122b] dark:to-black text-black dark:text-zinc-50">
       <div className="max-w-6xl mx-auto p-8">
-        <div className="flex items-center justify-between border-b border-zinc-200 dark:border-zinc-800 pb-4">
-          <div className="flex items-center gap-4">
-            <Image src="/logo.svg" alt="TCAT logo" width={48} height={48} className="rounded" />
-            <div>
-              <h1 className="text-3xl font-semibold">TCAT — Computer Information Technology</h1>
-              <p className="text-sm text-zinc-600 dark:text-zinc-400">Tennessee College of Applied Technology</p>
-            </div>
-          </div>
-        </div>
+        <SiteHeader />
 
         <section className="mt-6 flex flex-col gap-6">
           {options.map((opt, idx) => (
