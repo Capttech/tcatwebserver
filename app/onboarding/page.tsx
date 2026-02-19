@@ -1,20 +1,15 @@
-import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import SiteHeader from "../components/SiteHeader";
+import { JSX } from "react";
 
 export default function OnboardingPage(): JSX.Element {
   return (
     <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-indigo-50 dark:from-[#021028] dark:via-[#02122b] dark:to-black text-black dark:text-zinc-50">
       <div className="max-w-6xl mx-auto p-8">
-        <div className="flex items-center justify-between border-b border-zinc-200 dark:border-zinc-800 pb-4">
-          <div className="flex items-center gap-4">
-            <Image src="/logo.svg" alt="TCAT logo" width={48} height={48} className="rounded" />
-            <div>
-              <h1 className="text-3xl font-semibold">Onboarding</h1>
-              <p className="text-sm text-zinc-600 dark:text-zinc-400">Follow the steps below to complete initial setup for this course.</p>
-            </div>
-          </div>
-        </div>
+        <SiteHeader
+          title="Onboarding"
+          subtitle="Follow the steps below to complete initial setup for this course."
+        />
 
         <main className="mt-8 max-w-3xl mx-auto space-y-6 text-zinc-700 dark:text-zinc-300">
           <p>
