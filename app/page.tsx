@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { JSX } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -27,7 +28,7 @@ export default function Home() {
       icon: <FontAwesomeIcon icon={faClipboardList} size="lg" className="text-indigo-600" />,
       title: "Onboarding",
       description: "Step-by-step setup for the course: account and platform access, required software and tools, an initial checklist, how to join live sessions, and where to find key resources.",
-      href: "#/onboarding",
+      href: "/onboarding",
       buttonLabel: "Start",
     },
     {
@@ -108,12 +109,21 @@ export default function Home() {
               <p className="mt-4 text-zinc-700 dark:text-zinc-300 flex-1">{opt.description}</p>
 
               <div className="mt-6">
-                <a
-                  href={opt.href}
-                  className="inline-flex items-center rounded-md bg-indigo-600 px-4 py-2 text-white hover:bg-indigo-700 transition-colors"
-                >
-                  {opt.buttonLabel}
-                </a>
+                {opt.href && opt.href.startsWith("/") ? (
+                  <Link
+                    href={opt.href}
+                    className="inline-flex items-center rounded-md bg-indigo-600 px-4 py-2 text-white hover:bg-indigo-700 transition-colors"
+                  >
+                    {opt.buttonLabel}
+                  </Link>
+                ) : (
+                  <a
+                    href={opt.href}
+                    className="inline-flex items-center rounded-md bg-indigo-600 px-4 py-2 text-white hover:bg-indigo-700 transition-colors"
+                  >
+                    {opt.buttonLabel}
+                  </a>
+                )}
               </div>
             </article>
           ))}
