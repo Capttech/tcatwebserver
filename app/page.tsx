@@ -127,7 +127,7 @@ export default function Home() {
                 <div>
                   <h2 className="text-2xl font-semibold">Trial Test — Core 1</h2>
                   <p className="mt-2 text-zinc-700 dark:text-zinc-300 max-w-[60ch]">
-                    Take a timed Core 1 trial test to assess your readiness for Core 1 topics.
+                    Take a timed Core 1 trial test to assess your readiness for Core 1 topics. You have 90 minutes to complete the trial test.
                   </p>
                 </div>
               </div>
@@ -149,7 +149,7 @@ export default function Home() {
                 <div>
                   <h2 className="text-2xl font-semibold">Trial Test — Core 2</h2>
                   <p className="mt-2 text-zinc-700 dark:text-zinc-300 max-w-[60ch]">
-                    Take a timed Core 2 trial test to assess your readiness for Core 2 topics.
+                    Take a timed Core 2 trial test to assess your readiness for Core 2 topics. You have 90 minutes to complete the trial test.
                   </p>
                 </div>
               </div>
