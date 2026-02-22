@@ -1,6 +1,4 @@
-import dynamic from "next/dynamic";
-
-const QuizClient = dynamic(() => import("../components/QuizClient"), { ssr: false });
+import QuizClient from "../components/QuizClient";
 import PageWrapper from "../components/PageWrapper";
 
 export default function QuizzesPage() {
