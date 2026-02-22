@@ -108,30 +108,30 @@ export default function Home() {
   ];
 
   const getButtonClass = (id: string) => {
-    return "inline-flex items-center rounded-md bg-indigo-600 px-4 py-2 text-white hover:bg-indigo-700 transition-colors font-medium";
+    return "inline-flex items-center rounded-md bg-indigo-600 px-4 py-2 text-white hover:bg-indigo-700 transition-colors font-medium w-full justify-center md:w-auto";
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-indigo-50 dark:from-[#021028] dark:via-[#02122b] dark:to-black text-black dark:text-zinc-50">
-      <div className="max-w-6xl mx-auto p-8">
+      <div className="max-w-6xl mx-auto p-4 sm:p-8">
         <SiteHeader />
 
         <section className="mt-6 flex flex-col gap-6">
           <article className="p-6 rounded-lg bg-white/60 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800">
-            <div className="flex items-start justify-between">
+            <div className="flex flex-col md:flex-row items-start justify-between">
               <div className="flex items-start gap-4">
                 <div className="w-8 h-8 text-indigo-600 flex-shrink-0">
                   <FontAwesomeIcon icon={faQuestion} size="lg" />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-semibold">Trial Test — Core 1</h2>
-                  <p className="mt-2 text-zinc-700 dark:text-zinc-300 max-w-[60ch]">
+                  <h2 className="text-xl sm:text-2xl font-semibold">Trial Test — Core 1</h2>
+                  <p className="mt-2 text-zinc-700 dark:text-zinc-300 max-w-none md:max-w-[60ch]">
                     Take a timed Core 1 trial test to assess your readiness for Core 1 topics. You have 90 minutes to complete the trial test.
                   </p>
                 </div>
               </div>
 
-              <div className="ml-6 flex-shrink-0">
+              <div className="ml-0 md:ml-6 mt-4 md:mt-0 flex-shrink-0">
                 <Link href="/quizzes/core1-trial" className={getButtonClass("trial-core1")} aria-label="Start Core 1 trial">
                   Start Core 1
                 </Link>
@@ -140,20 +140,20 @@ export default function Home() {
           </article>
 
           <article className="p-6 rounded-lg bg-white/60 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800">
-            <div className="flex items-start justify-between">
+            <div className="flex flex-col md:flex-row items-start justify-between">
               <div className="flex items-start gap-4">
                 <div className="w-8 h-8 text-indigo-600 flex-shrink-0">
                   <FontAwesomeIcon icon={faQuestion} size="lg" />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-semibold">Trial Test — Core 2</h2>
-                  <p className="mt-2 text-zinc-700 dark:text-zinc-300 max-w-[60ch]">
+                  <h2 className="text-xl sm:text-2xl font-semibold">Trial Test — Core 2</h2>
+                  <p className="mt-2 text-zinc-700 dark:text-zinc-300 max-w-none md:max-w-[60ch]">
                     Take a timed Core 2 trial test to assess your readiness for Core 2 topics. You have 90 minutes to complete the trial test.
                   </p>
                 </div>
               </div>
 
-              <div className="ml-6 flex-shrink-0">
+              <div className="ml-0 md:ml-6 mt-4 md:mt-0 flex-shrink-0">
                 <Link href="/quizzes/core2-trial" className={getButtonClass("trial-core2")} aria-label="Start Core 2 trial">
                   Start Core 2
                 </Link>
@@ -166,16 +166,16 @@ export default function Home() {
               className="p-6 rounded-lg bg-white/60 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800"
               style={{ animationDelay: `${idx * 80}ms` }}
             >
-              <div className="flex items-start justify-between">
+              <div className="flex flex-col md:flex-row items-start justify-between">
                 <div className="flex items-start gap-4">
                   <div className="w-8 h-8 text-indigo-600 flex-shrink-0">{opt.icon}</div>
                   <div>
-                    <h2 className="text-2xl font-semibold">{opt.title}</h2>
-                    <p className="mt-2 text-zinc-700 dark:text-zinc-300 max-w-[60ch]">{opt.description}</p>
+                    <h2 className="text-xl sm:text-2xl font-semibold">{opt.title}</h2>
+                    <p className="mt-2 text-zinc-700 dark:text-zinc-300 max-w-none md:max-w-[60ch]">{opt.description}</p>
                   </div>
                 </div>
 
-                <div className="ml-6 flex-shrink-0">
+                <div className="ml-0 md:ml-6 mt-4 md:mt-0 flex-shrink-0">
                   {opt.href && opt.href.startsWith("/") ? (
                     <Link href={opt.href} className={getButtonClass(opt.id)} aria-label={`Open ${opt.title}`}>
                       {opt.buttonLabel}
