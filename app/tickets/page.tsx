@@ -1,6 +1,4 @@
-import dynamic from "next/dynamic";
-
-const TicketForm = dynamic(() => import("../components/TicketForm"), { ssr: false });
+import TicketForm from "../components/TicketForm";
 import PageWrapper from "../components/PageWrapper";
 
 export default function TicketsPage() {
