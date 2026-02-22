@@ -2,10 +2,11 @@ import React from 'react'
 import SafetySection from './components/SafetySection'
 import Callout from './components/Callout'
 import SiteHeader from '../components/SiteHeader'
+import PageWrapper from '../components/PageWrapper'
 
 export default function Page() {
   return (
-    <main className="min-h-screen bg-gradient-to-br from-[#071019] via-[#0b1220] to-[#071633] text-white flex items-start justify-center py-16 px-6">
+    <PageWrapper>
       <div className="max-w-3xl w-full">
         <SiteHeader title="Class Safety" subtitle="Guidelines and procedures to keep our classes safe and welcoming for everyone." className="mb-6" />
 
@@ -148,7 +149,7 @@ export default function Page() {
 
         </article>
       </div>
-    </main>
+    </PageWrapper>
   )
 }
 

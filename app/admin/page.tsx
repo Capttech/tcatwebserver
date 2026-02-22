@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import AdminLoginForm from '../components/AdminLoginForm';
 import AdminPanel from '../components/AdminPanel';
+import PageWrapper from '../components/PageWrapper';
 
 export default function AdminPage() {
   const [isAuth, setIsAuth] = useState(false);
@@ -15,13 +16,11 @@ export default function AdminPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-white dark:bg-black text-black dark:text-zinc-50">
-      <div className="max-w-3xl mx-auto p-8">
-        <h1 className="text-2xl font-semibold">Admin</h1>
-        <p className="text-sm text-zinc-600 dark:text-zinc-400 mt-2">Restricted area — please log in.</p>
+    <PageWrapper>
+      <h1 className="text-2xl font-semibold">Admin</h1>
+      <p className="text-sm text-zinc-600 dark:text-zinc-400 mt-2">Restricted area — please log in.</p>
 
-        {isAuth ? <AdminPanel /> : <AdminLoginForm />}
-      </div>
-    </div>
+      {isAuth ? <AdminPanel /> : <AdminLoginForm />}
+    </PageWrapper>
   );
 }

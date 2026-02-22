@@ -1,5 +1,6 @@
 import Link from "next/link";
 import SiteHeader from "./components/SiteHeader";
+import PageWrapper from "./components/PageWrapper";
 import { JSX } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -113,7 +114,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-indigo-50 dark:from-[#021028] dark:via-[#02122b] dark:to-black text-black dark:text-zinc-50">
-      <div className="max-w-6xl mx-auto p-4 sm:p-8">
+      <PageWrapper>
         <SiteHeader />
 
         <section className="mt-6 flex flex-col gap-6">
@@ -190,7 +191,7 @@ export default function Home() {
             </article>
           ))}
         </section>
-      </div>
+      </PageWrapper>
     </div>
   );
 }
