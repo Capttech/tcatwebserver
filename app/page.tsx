@@ -160,7 +160,7 @@ export default function Home() {
                   <Link
                     key={opt.id}
                     href={opt.href}
-                    className="block p-4 rounded-xl bg-white/70 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800"
+                    className="block p-4 rounded-xl bg-white/70 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 shadow-lg"
                   >
                     <div className="font-medium">{opt.title}</div>
                     <div className="text-sm text-zinc-600 dark:text-zinc-400">{opt.description}</div>
@@ -257,7 +257,7 @@ export default function Home() {
                         <Link
                           key={opt.id}
                           href={opt.href}
-                          className={`w-full max-w-[360px] flex items-start gap-3 p-4 rounded-xl bg-white/70 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 hover:shadow-md transition`}
+                          className={`w-full max-w-[360px] flex items-start gap-3 p-4 rounded-xl bg-white/70 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 shadow-lg hover:shadow-xl transition`}
                         >
                           <div className="w-10 h-10 flex items-center justify-center text-indigo-600">{opt.icon}</div>
                           <div>

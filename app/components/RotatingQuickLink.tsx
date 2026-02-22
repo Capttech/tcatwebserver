@@ -34,9 +34,10 @@ export default function RotatingQuickLink({ options, inline, full }: { options: 
 
     let rootClass = "rotating-animate";
     if (full) {
-        rootClass = "rotating-animate p-6 w-full h-full flex items-center";
+        rootClass = "rotating-animate p-6 w-full h-full flex items-center shadow-lg";
     } else if (inline) {
-        rootClass = "rotating-animate";
+        // mobile inline variant: visible colored card with padding and shadow
+        rootClass = "rotating-animate p-4 rounded-xl bg-gradient-to-br from-indigo-700 to-sky-500 text-white shadow-lg";
     } else {
         rootClass = "rotating-animate p-5 rounded-2xl bg-white/95 dark:bg-zinc-900/80 border border-zinc-200 dark:border-zinc-800 shadow-md transition-all";
     }
