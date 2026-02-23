@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
 
 type Props = {
+    id?: string;
     title?: string;
     icon?: ReactNode;
     children?: ReactNode;
@@ -10,6 +11,7 @@ type Props = {
 export default function WebCard({ title, icon, children, className = "" }: Props) {
     return (
         <section
+            id={typeof (arguments[0] as any).id === 'string' ? (arguments[0] as any).id : undefined}
             className={`p-6 rounded-lg bg-zinc-100/60 dark:bg-zinc-900/60 shadow-lg border border-zinc-200/40 dark:border-zinc-800/40 ${className}`}
         >
             <div className="flex items-start gap-4">

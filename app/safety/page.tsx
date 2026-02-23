@@ -1,16 +1,16 @@
 import React from 'react'
-import SafetySection from './components/SafetySection'
 import Callout from './components/Callout'
 import SiteHeader from '../components/SiteHeader'
 import PageWrapper from '../components/PageWrapper'
+import WebCard from '../components/WebCard'
 
 export default function Page() {
   return (
     <PageWrapper>
       <SiteHeader title="Class Safety" subtitle="Guidelines and procedures to keep our classes safe and welcoming for everyone." className="mb-6" />
 
-      <article>
-        <SafetySection id="lab-safety" title="Lab Safety" lead={null}>
+      <article className="space-y-6">
+        <WebCard id="lab-safety" title="Lab Safety">
           <ul className="list-disc pl-5">
             <li>
               <strong className="text-white">Wear proper clothing and PPE (Personal Protective Equipment)</strong>
@@ -27,14 +27,16 @@ export default function Page() {
               </ul>
             </li>
           </ul>
-        </SafetySection>
+        </WebCard>
 
-        <SafetySection id="ish-board" title="ISH Board" lead={<span className="font-semibold">ISH Boards (Information Security Health)</span>}>
+        <WebCard id="ish-board" title="ISH Board">
+          <p className="font-semibold">ISH Boards (Information Security Health)</p>
           <p>Each program is equipped with an ISH Board. This is where you can find first-aid equipment, fire evacuation plans, emergency contact numbers, and other information that is useful during an emergency.</p>
           <p className="mt-3">You are encouraged to make yourself familiar with the ISH Board in your area.</p>
-        </SafetySection>
+        </WebCard>
 
-        <SafetySection id="natural-disasters" title="Natural Disasters / Inclement Weather" lead={<span>The Southeastern U.S. is subject to various natural hazards. <strong className="text-amber-200">Know the procedures for your building and participate in required safety drills.</strong></span>}>
+        <WebCard id="natural-disasters" title="Natural Disasters / Inclement Weather">
+          <p>The Southeastern U.S. is subject to various natural hazards. <strong className="text-amber-200">Know the procedures for your building and participate in required safety drills.</strong></p>
           <h3 className="text-lg font-semibold mt-3 underline">Tornado — Prepare</h3>
           <ul className="list-disc pl-5 mt-2">
             <li><strong>Watch vs. Warning:</strong> A <strong className="text-cyan-200">Tornado Watch</strong> means conditions are favorable; a <strong className="text-rose-200">Tornado Warning</strong> means a tornado has been spotted or shown on radar.</li>
@@ -70,16 +72,16 @@ export default function Page() {
           <h3 className="text-lg font-semibold mt-4 underline">Icy Conditions</h3>
           <p className="mt-2">TCAT Memphis Administration monitors winter weather closely. In the event of snow or ice accumulation, Administration may close the school until travel conditions improve. Closures are announced on local news and via Slate alerts.</p>
           <p className="mt-2 font-extrabold text-amber-200">REGARDLESS OF OPEN / CLOSED STATUS — <strong>DO NOT DRIVE IF IT IS NOT SAFE.</strong></p>
-        </SafetySection>
+        </WebCard>
 
-        <SafetySection id="students-disabilities" title="Students with Disabilities">
+        <WebCard id="students-disabilities" title="Students with Disabilities">
           <p>If you have a disability that prevents you from safely evacuating any area without assistance, you should notify your instructor on the first day you attend classes, or sooner.</p>
           <p className="mt-2">If you will require assistance during an emergency, personnel will be designated to find you and help you evacuate.</p>
           <p className="mt-2 font-semibold">Note: The person with the disability is the best authority on how to be moved.</p>
           <p className="mt-2">Provide your instructor with detailed instructions on what type of assistance you might need. This will be helpful in selecting a designee.</p>
-        </SafetySection>
+        </WebCard>
 
-        <SafetySection id="violence-on-campus" title="Violence on Campus">
+        <WebCard id="violence-on-campus" title="Violence on Campus">
           <h3 className="font-semibold underline">Be Prepared</h3>
           <ul className="list-disc pl-5 mt-2">
             <li>Understand the possibility of an act of violence on campus</li>
@@ -118,9 +120,9 @@ export default function Page() {
           <Callout>
             <p className="m-0">First Responders: Keep your hands visible and follow instructions. Obey all commands immediately.</p>
           </Callout>
-        </SafetySection>
+        </WebCard>
 
-        <SafetySection id="incident-reporting" title="Incident / Hazardous Condition Reporting">
+        <WebCard id="incident-reporting" title="Incident / Hazardous Condition Reporting">
           <p>Any time you are involved in an incident on campus that results in an injury, you need to complete an online <a href="https://tcatmemphis.edu/about/incident-report" target="_blank" rel="noopener noreferrer" className="text-indigo-300 underline">Incident Report</a>.</p>
           <p className="mt-3">If the incident involves a criminal act, such as a vehicle break-in, a different incident report must be completed. Students who report criminal acts will be provided the proper form when their initial report is made.</p>
           <p className="mt-3">Hazardous conditions may include:</p>
@@ -130,21 +132,21 @@ export default function Page() {
             <li>Trip hazards from cords or materials left out</li>
             <li>Blocked hallways or exits</li>
           </ul>
-        </SafetySection>
+        </WebCard>
 
-        <SafetySection id="safety-drills" title="Safety Drills">
+        <WebCard id="safety-drills" title="Safety Drills">
           <p>While attending classes, you will likely be required to participate in various safety drills such as fire, tornado, and earthquake preparedness drills.</p>
           <h3 className="font-semibold underline mt-3">Fire Drills</h3>
           <p className="mt-2">During a fire drill or alarm, exit the building calmly and meet at your program's designated outdoor meeting area. Instructors will lead students back after the all-clear is given.</p>
           <div className="mt-3">
             <img src="/images/fire-strobe.jpg" alt="Fire alarm strobe light" className="rounded-md max-w-full" />
           </div>
-        </SafetySection>
+        </WebCard>
 
-        <SafetySection id="download-presentation" title="Download Full Presentation">
+        <WebCard id="download-presentation" title="Download Full Presentation">
           <p>You can download the full PowerPoint that covers all safety topics on this page for offline viewing or instructor-led presentation.</p>
           <p className="mt-3"><a href="/safety_powerpoint.pptx" download className="text-indigo-300 underline font-semibold">Download the safety presentation (safety_powerpoint.pptx)</a></p>
-        </SafetySection>
+        </WebCard>
 
       </article>
     </PageWrapper>
