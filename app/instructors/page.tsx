@@ -1,44 +1,49 @@
 import Image from "next/image";
 import PageWrapper from "../components/PageWrapper";
+import SiteHeader from "../components/SiteHeader";
 
 export default function InstructorsPage() {
   const instructors = [
     {
-      name: "Dr. Alex Carter",
-      title: "Lead Instructor",
-      email: "acarter@example.edu",
-      hours: "Mon 2:00–4:00pm",
-      bio: "Expert in networking and system administration. Loves hands-on labs and troubleshooting.",
+      name: "Sean Blackwell",
+      title: "Instructor",
+      email: "sean.blackwell@tcatmemphis.edu",
+      bio: "Sean Blackwell has over a decade of experience teaching hands-on technical courses. He focuses on practical skills and real-world scenarios.",
+      img: "/images/instructors/sean.svg",
     },
     {
-      name: "Jamie Lee",
-      title: "Teaching Assistant",
-      email: "jlee@example.edu",
-      hours: "Wed 10:00–12:00pm",
-      bio: "Supports lab sessions and grading. Enjoys scripting and automation.",
+      name: "Kameron Lovell",
+      title: "Instructor",
+      email: "kameron.lovell@tcatmemphis.edu",
+      bio: "Kameron Lovell specializes in safety and applied techniques, bringing field experience into classroom training and demos.",
+      img: "/images/instructors/kameron.svg",
     },
   ];
 
   return (
     <PageWrapper>
-      <h1 className="text-2xl font-semibold">Instructors & TAs</h1>
-      <p className="text-sm text-zinc-600 dark:text-zinc-400 mt-2">Contact details and office hours for course staff.</p>
+      <SiteHeader
+        title='Instructors — TCAT Computer Information Technology'
+        subtitle='Meet Sean Blackwell and Kameron Lovell — bios, roles, and contact details for course instructors.'
+      />
 
-      <div className="mt-6 grid gap-4">
+      <div className="mt-6 grid gap-6 grid-cols-1 md:grid-cols-2">
         {instructors.map((ins) => (
           <div key={ins.email} className="p-4 rounded-md border bg-gradient-to-r from-white to-sky-50 dark:from-zinc-900 dark:to-zinc-800">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-indigo-600 rounded-full flex items-center justify-center text-white font-semibold">{ins.name.split(" ").map(n => n[0]).slice(0, 2).join("")}</div>
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+              <div className="flex-shrink-0 w-32 h-32 rounded-md overflow-hidden bg-zinc-100 dark:bg-zinc-800">
+                <Image src={ins.img} alt={ins.name} width={128} height={128} className="object-cover w-full h-full" />
+              </div>
+
               <div>
                 <h2 className="text-lg font-medium">{ins.name}</h2>
-                <div className="text-sm text-zinc-600 dark:text-zinc-400">{ins.title} • <span className="italic">{ins.hours}</span></div>
+                <div className="text-sm text-zinc-600 dark:text-zinc-400">{ins.title}</div>
+                <p className="mt-2 text-zinc-700 dark:text-zinc-300 text-sm max-w-prose">{ins.bio}</p>
+
+                <div className="mt-3 text-sm">
+                  <a href={`mailto:${ins.email}`} className="text-indigo-600 hover:underline">{ins.email}</a>
+                </div>
               </div>
-            </div>
-
-            <p className="mt-3 text-zinc-700 dark:text-zinc-300">{ins.bio}</p>
-
-            <div className="mt-3 text-sm">
-              <a href={`mailto:${ins.email}`} className="text-indigo-600 hover:underline">{ins.email}</a>
             </div>
           </div>
         ))}

@@ -34,6 +34,14 @@ export default function Home() {
       buttonLabel: "Begin Onboarding",
     },
     {
+      id: "instructors",
+      icon: <FontAwesomeIcon icon={faUsers} size="lg" className="text-indigo-600" />,
+      title: "Instructors",
+      description: "Find instructor and TA contact details, office hours, and short biographies to help you connect with course staff.",
+      href: "/instructors",
+      buttonLabel: "View Profiles",
+    },
+    {
       id: "syllabus",
       icon: <FontAwesomeIcon icon={faBook} size="lg" className="text-indigo-600" />,
       title: "Class Syllabus",
@@ -42,12 +50,22 @@ export default function Home() {
       buttonLabel: "Review Syllabus",
     },
     {
-      id: "kahoot",
-      icon: <FontAwesomeIcon icon={faGamepad} size="lg" className="text-indigo-600" />,
-      title: "Kahoot Review Game",
-      description: "Join an interactive review session to reinforce key concepts. Supports live play and practice modes for individual or group study.",
-      href: "/coming-soon",
-      buttonLabel: "Launch Review",
+      id: "required-materials",
+      icon: <FontAwesomeIcon icon={faBook} size="lg" className="text-indigo-600" />,
+      title: "Required materials",
+      description:
+        "List of required textbooks, tools, and consumables needed for class activities. Ensure you have these items before attending hands-on sessions.",
+      href: "/required-materials",
+      buttonLabel: "View Materials",
+    },
+    {
+      id: "safety",
+      icon: <FontAwesomeIcon icon={faClipboardList} size="lg" className="text-indigo-600" />,
+      title: "Classroom Safety",
+      description:
+        "Review lab rules, required personal protective equipment (PPE), emergency procedures, and incident reporting protocols before participating in hands-on activities. Follow instructor guidance and posted safety procedures to maintain a safe learning environment.",
+      href: "/safety",
+      buttonLabel: "Review Safety",
     },
     {
       id: "study-guide",
@@ -58,12 +76,12 @@ export default function Home() {
       buttonLabel: "Coming Soon",
     },
     {
-      id: "instructors",
-      icon: <FontAwesomeIcon icon={faUsers} size="lg" className="text-indigo-600" />,
-      title: "Instructors",
-      description: "Find instructor and TA contact details, office hours, and short biographies to help you connect with course staff.",
-      href: "/instructors",
-      buttonLabel: "View Profiles",
+      id: "kahoot",
+      icon: <FontAwesomeIcon icon={faGamepad} size="lg" className="text-indigo-600" />,
+      title: "Kahoot Review Game",
+      description: "Join an interactive review session to reinforce key concepts. Supports live play and practice modes for individual or group study.",
+      href: "/coming-soon",
+      buttonLabel: "Launch Review",
     },
     {
       id: "quizzes",
@@ -72,15 +90,6 @@ export default function Home() {
       description: "Auto-graded practice quizzes to assess your understanding. Track progress and revisit topics where you need improvement.",
       href: "/coming-soon",
       buttonLabel: "Start Quiz",
-    },
-    {
-      id: "required-materials",
-      icon: <FontAwesomeIcon icon={faBook} size="lg" className="text-indigo-600" />,
-      title: "Required materials",
-      description:
-        "List of required textbooks, tools, and consumables needed for class activities. Ensure you have these items before attending hands-on sessions.",
-      href: "/required-materials",
-      buttonLabel: "View Materials",
     },
     {
       id: "tickets",
@@ -98,15 +107,7 @@ export default function Home() {
       href: "/coming-soon",
       buttonLabel: "Coming Soon",
     },
-    {
-      id: "safety",
-      icon: <FontAwesomeIcon icon={faClipboardList} size="lg" className="text-indigo-600" />,
-      title: "Classroom Safety",
-      description:
-        "Review lab rules, required personal protective equipment (PPE), emergency procedures, and incident reporting protocols before participating in hands-on activities. Follow instructor guidance and posted safety procedures to maintain a safe learning environment.",
-      href: "/safety",
-      buttonLabel: "Review Safety",
-    },
+
   ];
 
   const getButtonClass = (id: string) => {
