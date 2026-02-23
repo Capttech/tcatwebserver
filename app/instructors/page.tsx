@@ -1,6 +1,7 @@
 import Image from "next/image";
 import PageWrapper from "../components/PageWrapper";
 import SiteHeader from "../components/SiteHeader";
+import WebCard from "../components/WebCard";
 
 export default function InstructorsPage() {
   const instructors = [
@@ -29,23 +30,24 @@ export default function InstructorsPage() {
 
       <div className="mt-6 grid gap-6 grid-cols-1 md:grid-cols-2">
         {instructors.map((ins) => (
-          <div key={ins.email} className="p-4 rounded-md border bg-gradient-to-r from-white to-sky-50 dark:from-zinc-900 dark:to-zinc-800">
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-              <div className="flex-shrink-0 w-32 h-32 rounded-md overflow-hidden bg-zinc-100 dark:bg-zinc-800">
-                <Image src={ins.img} alt={ins.name} width={128} height={128} className="object-cover w-full h-full" />
+          <WebCard
+            key={ins.email}
+            title={ins.name}
+            icon={
+              <div className="w-20 h-20 rounded-md overflow-hidden bg-zinc-100 dark:bg-zinc-800">
+                <Image src={ins.img} alt={ins.name} width={80} height={80} className="object-cover w-full h-full" />
               </div>
+            }
+          >
+            <div>
+              <div className="text-sm text-zinc-600 dark:text-zinc-400">{ins.title}</div>
+              <p className="mt-2 text-zinc-700 dark:text-zinc-300 text-sm max-w-prose">{ins.bio}</p>
 
-              <div>
-                <h2 className="text-lg font-medium">{ins.name}</h2>
-                <div className="text-sm text-zinc-600 dark:text-zinc-400">{ins.title}</div>
-                <p className="mt-2 text-zinc-700 dark:text-zinc-300 text-sm max-w-prose">{ins.bio}</p>
-
-                <div className="mt-3 text-sm">
-                  <a href={`mailto:${ins.email}`} className="text-indigo-600 hover:underline">{ins.email}</a>
-                </div>
+              <div className="mt-3 text-sm">
+                <a href={`mailto:${ins.email}`} className="text-indigo-600 hover:underline">{ins.email}</a>
               </div>
             </div>
-          </div>
+          </WebCard>
         ))}
       </div>
     </PageWrapper>

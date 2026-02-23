@@ -3,6 +3,7 @@ import SiteHeader from "./components/SiteHeader";
 import PageWrapper from "./components/PageWrapper";
 import { JSX } from "react";
 import RotatingQuickLink from "./components/RotatingQuickLink";
+import WebCard from "./components/WebCard";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faClipboardList,
@@ -158,13 +159,16 @@ export default function Home() {
 
               <div className="mt-4 space-y-3">
                 {options.slice(0, 10).map((opt) => (
-                  <Link
-                    key={opt.id}
-                    href={opt.href}
-                    className="block p-4 rounded-xl bg-white/70 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 shadow-lg"
-                  >
-                    <div className="font-medium">{opt.title}</div>
-                    <div className="text-sm text-zinc-600 dark:text-zinc-400">{opt.description}</div>
+                  <Link key={opt.id} href={opt.href} className="block">
+                    <WebCard title={opt.title} className="w-full h-full">
+                      <div className="flex items-start gap-3">
+                        <div className="w-10 h-10 flex items-center justify-center text-indigo-600">{opt.icon}</div>
+                        <div>
+                          <div className="font-medium text-zinc-900 dark:text-white">{opt.title}</div>
+                          <div className="text-sm text-zinc-600 dark:text-zinc-400">{opt.description}</div>
+                        </div>
+                      </div>
+                    </WebCard>
                   </Link>
                 ))}
               </div>
@@ -255,16 +259,16 @@ export default function Home() {
                       style={{ display: "grid", gridTemplateColumns: `repeat(${rowLen}, minmax(220px, 360px))`, gap: "1rem", justifyContent: "center" }}
                     >
                       {row.map((opt) => (
-                        <Link
-                          key={opt.id}
-                          href={opt.href}
-                          className={`w-full max-w-[360px] flex items-start gap-3 p-4 rounded-xl bg-white/70 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 shadow-lg hover:shadow-xl transition`}
-                        >
-                          <div className="w-10 h-10 flex items-center justify-center text-indigo-600">{opt.icon}</div>
-                          <div>
-                            <div className="font-medium">{opt.title}</div>
-                            <div className="text-sm text-zinc-600 dark:text-zinc-400">{opt.description}</div>
-                          </div>
+                        <Link key={opt.id} href={opt.href} className={`w-full max-w-[360px] block`}>
+                          <WebCard title={opt.title} className={`w-full h-full`}>
+                            <div className="flex items-start gap-3">
+                              <div className="w-10 h-10 flex items-center justify-center text-indigo-600">{opt.icon}</div>
+                              <div>
+                                <div className="font-medium text-zinc-900 dark:text-white">{opt.title}</div>
+                                <div className="text-sm text-zinc-600 dark:text-zinc-400">{opt.description}</div>
+                              </div>
+                            </div>
+                          </WebCard>
                         </Link>
                       ))}
                     </div>

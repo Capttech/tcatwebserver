@@ -19,7 +19,7 @@ export default function PageWrapper({ children, className = "" }: Props) {
             className={`relative w-full min-h-screen overflow-hidden ${className}`}
             style={{
                 backgroundImage:
-                    "radial-gradient(circle at 10% 10%, rgba(8,0,84,0.45) 0%, transparent 30%), linear-gradient(135deg, #080054 0%, #000000 100%)",
+                    "radial-gradient(circle at 10% 10%, rgba(8,0,84,0.45) 0%, transparent 30%), linear-gradient(to bottom right, #000000 0%, #080054 60%, #1e293b 100%)",
             }}
         >
             {/* animated glow circles (background) - full-bleed */}
