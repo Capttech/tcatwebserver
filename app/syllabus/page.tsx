@@ -14,7 +14,7 @@ export default function Page() {
                 subtitle="Program overview, policies, and expectations for Computer Information Technology."
             />
 
-            <main className="mt-6 space-y-6">
+            <main className="mt-4 space-y-5 sm:mt-6 sm:space-y-6 [&_p]:leading-relaxed [&_ul]:text-sm sm:[&_ul]:text-base [&_table]:text-sm sm:[&_table]:text-base [&_th]:!px-2 [&_td]:!px-2 sm:[&_th]:!px-4 sm:[&_td]:!px-4 [&_.overflow-x-auto]:-mx-4 [&_.overflow-x-auto]:px-4 sm:[&_.overflow-x-auto]:mx-0 sm:[&_.overflow-x-auto]:px-0">
                 <WebCard id="course-description" title="Course Description">
                     <p>
                         The mission of the Computer Information Technology program is to prepare students for in-demand careers in IT support, networking, cybersecurity, cloud infrastructure, and systems administration. Using industry-recognized platforms such as TestOut and CompTIA CertMaster Learn, students will build real-world skills through interactive labs, simulations, and guided certification prep.
@@ -63,7 +63,7 @@ export default function Page() {
 
                 <WebCard id="grading-scale" title="Grading Scale / Method for Computing Grades">
                     <div className="mt-3 overflow-x-auto">
-                        <table className="min-w-full text-left text-zinc-300 border border-white/10 rounded-md">
+                        <table className="min-w-[720px] text-left text-zinc-300 border border-white/10 rounded-md">
                             <thead className="bg-white/5 text-zinc-100">
                                 <tr>
                                     <th className="px-4 py-2 font-semibold border-b border-white/10">Letter Grade</th>
@@ -102,7 +102,7 @@ export default function Page() {
 
                 <WebCard id="cit-0001" title="CIT 0001">
                     <div className="mt-3 overflow-x-auto">
-                        <table className="min-w-full text-left text-zinc-300 border border-white/10 rounded-md">
+                        <table className="min-w-[720px] text-left text-zinc-300 border border-white/10 rounded-md">
                             <tbody>
                                 <tr className="border-b border-white/10">
                                     <th className="px-4 py-2 font-semibold text-zinc-100 w-1/3">Course Title</th>
