@@ -34,7 +34,7 @@ export default function InstructorsPage() {
             key={ins.email}
             title={ins.name}
             icon={
-              <div className="w-20 h-20 rounded-md overflow-hidden bg-zinc-100 dark:bg-zinc-800">
+              <div className="h-16 w-16 shrink-0 rounded-md overflow-hidden bg-zinc-100 dark:bg-zinc-800 sm:h-20 sm:w-20">
                 <Image src={ins.img} alt={ins.name} width={80} height={80} className="object-cover w-full h-full" />
               </div>
             }
@@ -44,7 +44,12 @@ export default function InstructorsPage() {
               <p className="mt-2 text-zinc-700 dark:text-zinc-300 text-sm max-w-prose">{ins.bio}</p>
 
               <div className="mt-3 text-sm">
-                <a href={`mailto:${ins.email}`} className="text-indigo-600 hover:underline">{ins.email}</a>
+                <a
+                  href={`mailto:${ins.email}`}
+                  className="inline-block max-w-full break-all text-indigo-600 hover:underline"
+                >
+                  {ins.email}
+                </a>
               </div>
             </div>
           </WebCard>
