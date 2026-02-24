@@ -51,15 +51,6 @@ export default function Home() {
       buttonLabel: "Review Syllabus",
     },
     {
-      id: "required-materials",
-      icon: <FontAwesomeIcon icon={faBook} size="lg" className="text-indigo-600" />,
-      title: "Required materials",
-      description:
-        "List of required textbooks, tools, and consumables needed for class activities. Ensure you have these items before attending hands-on sessions.",
-      href: "/required-materials",
-      buttonLabel: "View Materials",
-    },
-    {
       id: "safety",
       icon: <FontAwesomeIcon icon={faClipboardList} size="lg" className="text-indigo-600" />,
       title: "Classroom Safety",
@@ -67,6 +58,23 @@ export default function Home() {
         "Review lab rules, required personal protective equipment (PPE), emergency procedures, and incident reporting protocols before participating in hands-on activities. Follow instructor guidance and posted safety procedures to maintain a safe learning environment.",
       href: "/safety",
       buttonLabel: "Review Safety",
+    },
+    {
+      id: "class-edicate",
+      icon: <FontAwesomeIcon icon={faTicket} size="lg" className="text-indigo-600" />,
+      title: "Class Edicate",
+      description: "Class information and expectations for student conduct, communication, and day-to-day course participation.",
+      href: "/class-edicate",
+      buttonLabel: "View Information",
+    },
+    {
+      id: "required-materials",
+      icon: <FontAwesomeIcon icon={faBook} size="lg" className="text-indigo-600" />,
+      title: "Required materials",
+      description:
+        "List of required textbooks, tools, and consumables needed for class activities. Ensure you have these items before attending hands-on sessions.",
+      href: "/required-materials",
+      buttonLabel: "View Materials",
     },
     {
       id: "study-guide",
@@ -91,14 +99,6 @@ export default function Home() {
       description: "Auto-graded practice quizzes to assess your understanding. Track progress and revisit topics where you need improvement.",
       href: "/coming-soon",
       buttonLabel: "Start Quiz",
-    },
-    {
-      id: "tickets",
-      icon: <FontAwesomeIcon icon={faTicket} size="lg" className="text-indigo-600" />,
-      title: "Ticket Edicate",
-      description: "Request equipment support or sign out for off-site tasks. Staff can log departures and confirm returns for accountability.",
-      href: "/tickets",
-      buttonLabel: "Manage Tickets",
     },
     {
       id: "ticket-submission",

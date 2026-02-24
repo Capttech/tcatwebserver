@@ -58,10 +58,6 @@ export default function OnboardingPage(): JSX.Element {
             If the course requires CompTIA resources or certification tracking, create an account on the CompTIA portal. Use a reliable email address, remember your credentials, and verify your account if prompted. Create your CompTIA account here: <a href="https://login.comptia.org/home" target="_blank" rel="noreferrer" className="text-indigo-600 underline">CompTIA Sign Up</a>.
           </p>
         </WebCard>
-
-        <WebCard title="Coming Soon">
-          <p>Additional onboarding tools and resources will be added here soon — check back for interactive setup guides and videos.</p>
-        </WebCard>
       </main>
     </PageWrapper>
   );
