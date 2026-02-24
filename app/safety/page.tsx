@@ -9,7 +9,7 @@ export default function Page() {
     <PageWrapper>
       <SiteHeader title="Class Safety" subtitle="Guidelines and procedures to keep our classes safe and welcoming for everyone." className="mb-6" />
 
-      <article className="space-y-6">
+      <article className="space-y-6 mt-4">
         <WebCard id="lab-safety" title="Lab Safety">
           <ul className="list-disc pl-5">
             <li>
@@ -143,9 +143,9 @@ export default function Page() {
           </div>
         </WebCard>
 
-        <WebCard id="download-presentation" title="Download Full Presentation">
-          <p>You can download the full PowerPoint that covers all safety topics on this page for offline viewing or instructor-led presentation.</p>
-          <p className="mt-3"><a href="/safety_powerpoint.pptx" download className="text-indigo-300 underline font-semibold">Download the safety presentation (safety_powerpoint.pptx)</a></p>
+        <WebCard id="download-presentation" title="Download Safety Rules PDF">
+          <p>You can download the full safety rules PDF for offline viewing or printing.</p>
+          <p className="mt-3"><a href="/CIT General Safety Rules.pdf" download className="text-indigo-300 underline font-semibold">Download the safety rules (CIT General Safety Rules.pdf)</a></p>
         </WebCard>
 
       </article>
