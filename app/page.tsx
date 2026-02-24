@@ -73,8 +73,8 @@ export default function Home() {
       icon: <FontAwesomeIcon icon={faBookOpen} size="lg" className="text-indigo-600" />,
       title: "Study Guide (Core 1 & 2)",
       description: "Organized summaries, worked examples, and practice problems for Core 1 & 2, with downloadable materials and self-check exercises.",
-      href: "/coming-soon",
-      buttonLabel: "Coming Soon",
+      href: "/study-guide",
+      buttonLabel: "Open Study Guide",
     },
     {
       id: "kahoot",
