@@ -8,11 +8,33 @@ export default function AdminPage() {
   const [isAuth, setIsAuth] = useState(false);
 
   useEffect(() => {
-    const cookieHeader = typeof document !== 'undefined' ? document.cookie : '';
-    const match = cookieHeader.split(';').map(s => s.trim()).find(s => s.startsWith('tcat_admin='));
-    const cookieAuth = !!match && match.split('=')[1] === '1';
-    const localAuth = typeof localStorage !== 'undefined' ? localStorage.getItem('tcat_admin_public') === '1' : false;
-    setIsAuth(cookieAuth || localAuth);
+    let active = true;
+
+    async function checkSession() {
+      try {
+        const res = await fetch('/api/admin/session', {
+          method: 'GET',
+          credentials: 'include',
+          cache: 'no-store',
+        });
+
+        if (!res.ok) {
+          if (active) setIsAuth(false);
+          return;
+        }
+
+        const body = await res.json();
+        if (active) setIsAuth(body?.isAuth === true);
+      } catch {
+        if (active) setIsAuth(false);
+      }
+    }
+
+    checkSession();
+
+    return () => {
+      active = false;
+    };
   }, []);
 
   return (

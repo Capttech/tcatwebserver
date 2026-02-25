@@ -29,9 +29,16 @@ export default function AdminPanel() {
 
   async function logout() {
     setLoading(true);
-    await fetch('/api/admin/logout', { method: 'POST' });
-    try { localStorage.removeItem('tcat_admin_public'); } catch {}
-    window.location.reload();
+    try {
+      await fetch('/api/admin/logout', {
+        method: 'POST',
+        credentials: 'include',
+        cache: 'no-store',
+      });
+    } finally {
+      try { localStorage.removeItem('tcat_admin_public'); } catch { }
+      window.location.reload();
+    }
   }
 
   function markReturned(id: string) {
@@ -39,7 +46,7 @@ export default function AdminPanel() {
   }
 
   function exportCSV() {
-    const header = ["id","student","studentId","location","reason","timeOut","expectedReturn","returned","returnTime","instructor"];
+    const header = ["id", "student", "studentId", "location", "reason", "timeOut", "expectedReturn", "returned", "returnTime", "instructor"];
     const rows = tickets.map(t => header.map(h => (t as any)[h] ?? "").join(","));
     const csv = [header.join(","), ...rows].join("\n");
     const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
@@ -108,7 +115,7 @@ export default function AdminPanel() {
                   {t.returned && <div className="text-xs text-green-600">Returned: {t.returnTime ? new Date(t.returnTime).toLocaleString() : ''}</div>}
                 </div>
                 <div className="flex flex-col items-end gap-2">
-                  {!t.returned ? <button onClick={()=>markReturned(t.id)} className="px-2 py-1 rounded bg-green-600 text-white">Mark Returned</button> : <span className="text-sm">✅</span>}
+                  {!t.returned ? <button onClick={() => markReturned(t.id)} className="px-2 py-1 rounded bg-green-600 text-white">Mark Returned</button> : <span className="text-sm">✅</span>}
                 </div>
               </div>
             ))}

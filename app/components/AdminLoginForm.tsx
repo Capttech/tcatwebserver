@@ -15,10 +15,10 @@ export default function AdminLoginForm() {
       const res = await fetch('/api/admin/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify({ username, password }),
       });
       if (res.ok) {
-        try { localStorage.setItem('tcat_admin_public', '1'); } catch {}
         window.location.reload();
       } else {
         const body = await res.json();
@@ -35,11 +35,11 @@ export default function AdminLoginForm() {
     <form onSubmit={submit} className="max-w-sm mt-4 space-y-2">
       <div>
         <label className="text-sm">Username</label>
-        <input value={username} onChange={e=>setUsername(e.target.value)} className="w-full p-2 border rounded" />
+        <input value={username} onChange={e => setUsername(e.target.value)} className="w-full p-2 border rounded" />
       </div>
       <div>
         <label className="text-sm">Password</label>
-        <input type="password" value={password} onChange={e=>setPassword(e.target.value)} className="w-full p-2 border rounded" />
+        <input type="password" value={password} onChange={e => setPassword(e.target.value)} className="w-full p-2 border rounded" />
       </div>
       {error && <div className="text-sm text-red-600">{error}</div>}
       <div className="flex items-center gap-2">
