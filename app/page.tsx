@@ -103,10 +103,10 @@ export default function Home() {
     {
       id: "ticket-submission",
       icon: <FontAwesomeIcon icon={faClipboardList} size="lg" className="text-indigo-600" />,
-      title: "Ticket Submission",
-      description: "Students: log what you did while working on a ticket and summarize how you resolved it. Include steps taken, troubleshooting details, and final outcome to help staff review and learn.",
-      href: "/coming-soon",
-      buttonLabel: "Coming Soon",
+      title: "Tickets",
+      description: "View all open and closed tickets. Select a ticket to open the submission form and edit or save ticket details.",
+      href: "/tickets",
+      buttonLabel: "View Tickets",
     },
 
   ];

@@ -1,0 +1,19 @@
+{
+  "counters": {
+    "ticketId": 1
+  },
+  "tickets": [
+    {
+      "id": 1,
+      "teamLeader": "",
+      "teamMembers": "",
+      "completionDateTime": "2026-02-26",
+      "status": "open",
+      "subject": "TV",
+      "breakDown": "There is a tv on the nursing floor that is not working",
+      "resolution": "",
+      "createdAt": "2026-02-26T15:39:14.629Z",
+      "updatedAt": "2026-02-26T15:45:32.366Z"
+    }
+  ]
+}
