@@ -13,7 +13,7 @@ type Ticket = {
     id: number;
     teamLeader: string;
     teamMembers: string;
-    completionDateTime: string;
+    creationDateTime: string;
     status: TicketStatus;
     subject: string;
     breakDown: string;
@@ -25,7 +25,7 @@ type Ticket = {
 type TicketFormState = {
     teamLeader: string;
     teamMembers: string;
-    completionDateTime: string;
+    creationDateTime: string;
     status: TicketStatus;
     subject: string;
     breakDown: string;
@@ -35,7 +35,7 @@ type TicketFormState = {
 const EMPTY_FORM: TicketFormState = {
     teamLeader: "",
     teamMembers: "",
-    completionDateTime: "",
+    creationDateTime: "",
     status: "open",
     subject: "",
     breakDown: "",
@@ -95,7 +95,7 @@ export default function TicketSubmissionDetailPage() {
                 setForm({
                     teamLeader: loadedTicket.teamLeader || "",
                     teamMembers: loadedTicket.teamMembers || "",
-                    completionDateTime: toDateInput(loadedTicket.completionDateTime),
+                    creationDateTime: toDateInput(loadedTicket.creationDateTime),
                     status: loadedTicket.status,
                     subject: loadedTicket.subject || "",
                     breakDown: loadedTicket.breakDown || "",
@@ -119,7 +119,7 @@ export default function TicketSubmissionDetailPage() {
         if (
             !form.teamLeader.trim() ||
             !form.teamMembers.trim() ||
-            !form.completionDateTime.trim() ||
+            !form.creationDateTime.trim() ||
             !form.subject.trim() ||
             !form.breakDown.trim() ||
             !form.resolution.trim()
@@ -141,7 +141,7 @@ export default function TicketSubmissionDetailPage() {
                 body: JSON.stringify({
                     teamLeader: form.teamLeader.trim(),
                     teamMembers: form.teamMembers.trim(),
-                    completionDateTime: form.completionDateTime,
+                    creationDateTime: form.creationDateTime,
                     status: form.status,
                     subject: form.subject.trim(),
                     breakDown: form.breakDown.trim(),
@@ -223,16 +223,16 @@ export default function TicketSubmissionDetailPage() {
                             </div>
 
                             <div>
-                                <label htmlFor="completionDateTime" className="mb-1 block text-sm font-medium text-zinc-800 dark:text-zinc-200">
-                                    Completion Date
+                                <label htmlFor="creationDateTime" className="mb-1 block text-sm font-medium text-zinc-800 dark:text-zinc-200">
+                                    Creation Date
                                 </label>
                                 <input
-                                    id="completionDateTime"
-                                    name="completionDateTime"
+                                    id="creationDateTime"
+                                    name="creationDateTime"
                                     type="date"
                                     required
-                                    value={form.completionDateTime}
-                                    onChange={(e) => setForm((prev) => ({ ...prev, completionDateTime: e.target.value }))}
+                                    value={form.creationDateTime}
+                                    onChange={(e) => setForm((prev) => ({ ...prev, creationDateTime: e.target.value }))}
                                     className="w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-zinc-900 outline-none ring-indigo-500 focus:ring-2 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
                                 />
                             </div>

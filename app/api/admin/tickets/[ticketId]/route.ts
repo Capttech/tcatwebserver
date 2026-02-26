@@ -53,7 +53,11 @@ export async function PUT(req: Request, ctx: { params: Promise<{ ticketId: strin
 
         const teamLeader = typeof body?.teamLeader === 'string' ? body.teamLeader : '';
         const teamMembers = typeof body?.teamMembers === 'string' ? body.teamMembers : '';
-        const completionDateTime = typeof body?.completionDateTime === 'string' ? body.completionDateTime : undefined;
+        const creationDateTime = typeof body?.creationDateTime === 'string'
+            ? body.creationDateTime
+            : typeof body?.completionDateTime === 'string'
+                ? body.completionDateTime
+                : undefined;
         const status = parseStatus(body?.status);
         const subject = typeof body?.subject === 'string' ? body.subject : undefined;
         const breakDown = typeof body?.breakDown === 'string' ? body.breakDown : undefined;
@@ -65,14 +69,14 @@ export async function PUT(req: Request, ctx: { params: Promise<{ ticketId: strin
         if (breakDown !== undefined && !breakDown.trim()) {
             return NextResponse.json({ ok: false, error: 'Break Down cannot be empty.' }, { status: 400 });
         }
-        if (completionDateTime !== undefined && !completionDateTime.trim()) {
-            return NextResponse.json({ ok: false, error: 'Completion Date cannot be empty.' }, { status: 400 });
+        if (creationDateTime !== undefined && !creationDateTime.trim()) {
+            return NextResponse.json({ ok: false, error: 'Creation Date cannot be empty.' }, { status: 400 });
         }
 
         const ticket = updateTicket(id, {
             teamLeader,
             teamMembers,
-            completionDateTime,
+            creationDateTime,
             status,
             subject,
             breakDown,

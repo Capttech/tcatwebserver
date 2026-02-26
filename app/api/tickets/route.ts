@@ -18,20 +18,20 @@ export async function POST(req: Request) {
         const body = await req.json();
         const teamLeader = String(body?.teamLeader || '').trim();
         const teamMembers = String(body?.teamMembers || '').trim();
-        const completionDateTime = String(body?.completionDateTime || '').trim();
+        const creationDateTime = String(body?.creationDateTime || body?.completionDateTime || '').trim();
         const status = parseStatus(body?.status);
         const subject = String(body?.subject || '').trim();
         const breakDown = String(body?.breakDown || '').trim();
         const resolution = String(body?.resolution || '').trim();
 
-        if (!completionDateTime || !status || !subject || !breakDown) {
-            return NextResponse.json({ ok: false, error: 'Completion Date, Subject, and Break Down are required.' }, { status: 400 });
+        if (!creationDateTime || !status || !subject || !breakDown) {
+            return NextResponse.json({ ok: false, error: 'Creation Date, Subject, and Break Down are required.' }, { status: 400 });
         }
 
         const ticket = createTicket({
             teamLeader,
             teamMembers,
-            completionDateTime,
+            creationDateTime,
             status,
             subject,
             breakDown,
