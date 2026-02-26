@@ -97,7 +97,7 @@ export default function Home() {
       icon: <FontAwesomeIcon icon={faQuestion} size="lg" className="text-indigo-600" />,
       title: "Quizzes",
       description: "Auto-graded practice quizzes to assess your understanding. Track progress and revisit topics where you need improvement.",
-      href: "/coming-soon",
+      href: "/quizzes",
       buttonLabel: "Start Quiz",
     },
     {

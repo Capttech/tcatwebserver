@@ -17,9 +17,20 @@ type AdminQuiz = {
     id: number;
     title: string;
     description: string;
+    quizCode: string;
+    durationMinutes: number;
     createdAt: string;
     updatedAt: string;
     questions: AdminQuestion[];
+};
+
+type AdminBankQuestion = {
+    id: number;
+    prompt: string;
+    options: [string, string, string, string];
+    correctOption: number;
+    createdAt: string;
+    updatedAt: string;
 };
 
 type QuestionFormState = {
@@ -42,11 +53,18 @@ export default function AdminQuizEditor({ quizId }: { quizId: number }) {
     const [quiz, setQuiz] = useState<AdminQuiz | null>(null);
     const [editQuizTitle, setEditQuizTitle] = useState("");
     const [editQuizDescription, setEditQuizDescription] = useState("");
+    const [editQuizCode, setEditQuizCode] = useState("");
+    const [editQuizDurationMinutes, setEditQuizDurationMinutes] = useState("30");
 
     const [isCreateQuestionModalOpen, setIsCreateQuestionModalOpen] = useState(false);
     const [isEditQuestionModalOpen, setIsEditQuestionModalOpen] = useState(false);
+    const [isImportQuestionModalOpen, setIsImportQuestionModalOpen] = useState(false);
     const [activeQuestionId, setActiveQuestionId] = useState<number | null>(null);
     const [questionForm, setQuestionForm] = useState<QuestionFormState>(EMPTY_QUESTION);
+    const [questionBank, setQuestionBank] = useState<AdminBankQuestion[]>([]);
+    const [questionBankLoading, setQuestionBankLoading] = useState(false);
+    const [questionBankSearch, setQuestionBankSearch] = useState("");
+    const [selectedBankQuestionId, setSelectedBankQuestionId] = useState<number | null>(null);
 
     const loadQuiz = useCallback(async () => {
         setLoading(true);
@@ -68,6 +86,8 @@ export default function AdminQuizEditor({ quizId }: { quizId: number }) {
             setQuiz(nextQuiz);
             setEditQuizTitle(nextQuiz?.title || "");
             setEditQuizDescription(nextQuiz?.description || "");
+            setEditQuizCode(nextQuiz?.quizCode || "");
+            setEditQuizDurationMinutes(String(nextQuiz?.durationMinutes || 30));
         } catch (err: any) {
             setError(err?.message || "Failed to load quiz.");
             setQuiz(null);
@@ -89,6 +109,18 @@ export default function AdminQuizEditor({ quizId }: { quizId: number }) {
             return;
         }
 
+        const quizCode = editQuizCode.trim().toUpperCase();
+        if (!quizCode) {
+            setError("Quiz code is required.");
+            return;
+        }
+
+        const durationMinutes = Number(editQuizDurationMinutes);
+        if (!Number.isInteger(durationMinutes) || durationMinutes <= 0) {
+            setError("Quiz duration must be a whole number greater than 0.");
+            return;
+        }
+
         setActionBusy(true);
         setError(null);
         try {
@@ -97,7 +129,7 @@ export default function AdminQuizEditor({ quizId }: { quizId: number }) {
                 headers: { "Content-Type": "application/json" },
                 credentials: "include",
                 cache: "no-store",
-                body: JSON.stringify({ title, description: editQuizDescription.trim() }),
+                body: JSON.stringify({ title, description: editQuizDescription.trim(), quizCode, durationMinutes }),
             });
             const body = await res.json().catch(() => null);
 
@@ -143,6 +175,37 @@ export default function AdminQuizEditor({ quizId }: { quizId: number }) {
         setError(null);
         setQuestionForm(EMPTY_QUESTION);
         setIsCreateQuestionModalOpen(true);
+    }
+
+    async function loadQuestionBank() {
+        setQuestionBankLoading(true);
+        setError(null);
+        try {
+            const res = await fetch("/api/admin/question-bank", {
+                method: "GET",
+                credentials: "include",
+                cache: "no-store",
+            });
+            const body = await res.json().catch(() => null);
+
+            if (!res.ok) {
+                throw new Error(body?.error || `Failed to load question bank (${res.status})`);
+            }
+
+            const nextQuestions = Array.isArray(body?.questions) ? body.questions : [];
+            setQuestionBank(nextQuestions);
+        } catch (err: any) {
+            setError(err?.message || "Failed to load question bank.");
+        } finally {
+            setQuestionBankLoading(false);
+        }
+    }
+
+    async function openImportQuestionModal() {
+        setQuestionBankSearch("");
+        setSelectedBankQuestionId(null);
+        setIsImportQuestionModalOpen(true);
+        await loadQuestionBank();
     }
 
     function openEditQuestionModal(question: AdminQuestion) {
@@ -267,6 +330,46 @@ export default function AdminQuizEditor({ quizId }: { quizId: number }) {
         }
     }
 
+    async function importQuestionFromBank() {
+        if (!quiz || !selectedBankQuestionId) {
+            setError("Select a question to import.");
+            return;
+        }
+
+        setActionBusy(true);
+        setError(null);
+        try {
+            const res = await fetch(`/api/admin/quizzes/${quiz.id}/questions/import`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                credentials: "include",
+                cache: "no-store",
+                body: JSON.stringify({ bankQuestionId: selectedBankQuestionId }),
+            });
+            const body = await res.json().catch(() => null);
+
+            if (!res.ok) {
+                throw new Error(body?.error || `Failed to import question (${res.status})`);
+            }
+
+            setIsImportQuestionModalOpen(false);
+            setSelectedBankQuestionId(null);
+            await loadQuiz();
+        } catch (err: any) {
+            setError(err?.message || "Failed to import question.");
+        } finally {
+            setActionBusy(false);
+        }
+    }
+
+    const filteredQuestionBank = questionBank.filter((question) => {
+        const query = questionBankSearch.trim().toLowerCase();
+        if (!query) return true;
+
+        const haystack = [question.prompt, ...question.options].join(" ").toLowerCase();
+        return haystack.includes(query);
+    });
+
     if (loading) {
         return <div className="rounded-2xl border border-zinc-200/80 bg-white/90 p-5 text-sm text-zinc-600 shadow-sm dark:border-zinc-800 dark:bg-zinc-900/80 dark:text-zinc-400">Loading quiz...</div>;
     }
@@ -305,17 +408,44 @@ export default function AdminQuizEditor({ quizId }: { quizId: number }) {
             <div className="rounded-2xl border border-zinc-200/80 bg-white/90 p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900/80">
                 <h3 className="font-medium tracking-tight">Quiz Details</h3>
                 <div className="mt-3 space-y-3">
-                    <input
-                        value={editQuizTitle}
-                        onChange={(e) => setEditQuizTitle(e.target.value)}
-                        className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-zinc-700 dark:bg-zinc-950"
-                    />
-                    <textarea
-                        rows={3}
-                        value={editQuizDescription}
-                        onChange={(e) => setEditQuizDescription(e.target.value)}
-                        className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-zinc-700 dark:bg-zinc-950"
-                    />
+                    <div className="space-y-1">
+                        <div className="text-xs font-medium text-zinc-600 dark:text-zinc-400">Quiz Title</div>
+                        <input
+                            value={editQuizTitle}
+                            onChange={(e) => setEditQuizTitle(e.target.value)}
+                            className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-zinc-700 dark:bg-zinc-950"
+                        />
+                    </div>
+                    <div className="space-y-1">
+                        <div className="text-xs font-medium text-zinc-600 dark:text-zinc-400">Quiz Code</div>
+                        <input
+                            value={editQuizCode}
+                            onChange={(e) => setEditQuizCode(e.target.value.toUpperCase())}
+                            placeholder="Quiz code"
+                            className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm uppercase outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-zinc-700 dark:bg-zinc-950"
+                        />
+                    </div>
+                    <div className="space-y-1">
+                        <div className="text-xs font-medium text-zinc-600 dark:text-zinc-400">Time Allowed (Minutes)</div>
+                        <input
+                            type="number"
+                            min={1}
+                            step={1}
+                            value={editQuizDurationMinutes}
+                            onChange={(e) => setEditQuizDurationMinutes(e.target.value)}
+                            placeholder="Time allowed (minutes)"
+                            className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-zinc-700 dark:bg-zinc-950"
+                        />
+                    </div>
+                    <div className="space-y-1">
+                        <div className="text-xs font-medium text-zinc-600 dark:text-zinc-400">Quiz Description</div>
+                        <textarea
+                            rows={3}
+                            value={editQuizDescription}
+                            onChange={(e) => setEditQuizDescription(e.target.value)}
+                            className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-zinc-700 dark:bg-zinc-950"
+                        />
+                    </div>
                     <div className="flex flex-wrap gap-2">
                         <button
                             onClick={saveQuiz}
@@ -338,12 +468,20 @@ export default function AdminQuizEditor({ quizId }: { quizId: number }) {
             <div className="rounded-2xl border border-zinc-200/80 bg-white/90 p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900/80">
                 <div className="flex items-center justify-between gap-3">
                     <h3 className="font-medium tracking-tight">Questions ({quiz.questions.length})</h3>
-                    <button
-                        onClick={openCreateQuestionModal}
-                        className="rounded-lg bg-indigo-600 px-3 py-2 text-sm font-medium text-white transition hover:bg-indigo-500"
-                    >
-                        Create Question
-                    </button>
+                    <div className="flex items-center gap-2">
+                        <button
+                            onClick={openImportQuestionModal}
+                            className="rounded-lg border border-zinc-300 px-3 py-2 text-sm font-medium transition hover:bg-zinc-50 dark:border-zinc-700 dark:hover:bg-zinc-800"
+                        >
+                            Import Question
+                        </button>
+                        <button
+                            onClick={openCreateQuestionModal}
+                            className="rounded-lg bg-indigo-600 px-3 py-2 text-sm font-medium text-white transition hover:bg-indigo-500"
+                        >
+                            Create Question
+                        </button>
+                    </div>
                 </div>
 
                 {quiz.questions.length === 0 ? (
@@ -379,6 +517,69 @@ export default function AdminQuizEditor({ quizId }: { quizId: number }) {
                     </div>
                 )}
             </div>
+
+            <Modal
+                isOpen={isImportQuestionModalOpen}
+                title="Import Question"
+                subtitle="Search your question bank and import one question into this quiz."
+                onClose={() => setIsImportQuestionModalOpen(false)}
+                actions={(
+                    <>
+                        <button
+                            type="button"
+                            onClick={() => setIsImportQuestionModalOpen(false)}
+                            className="rounded-lg border border-zinc-300 px-3 py-2 text-sm font-medium transition hover:bg-zinc-50 dark:border-zinc-700 dark:hover:bg-zinc-800"
+                        >
+                            Cancel
+                        </button>
+                        <button
+                            type="button"
+                            onClick={importQuestionFromBank}
+                            disabled={actionBusy || !selectedBankQuestionId}
+                            className="rounded-lg bg-indigo-600 px-3 py-2 text-sm font-medium text-white transition hover:bg-indigo-500 disabled:cursor-not-allowed disabled:opacity-70"
+                        >
+                            {actionBusy ? "Importing..." : "Import Question"}
+                        </button>
+                    </>
+                )}
+            >
+                <div className="space-y-3">
+                    <input
+                        value={questionBankSearch}
+                        onChange={(e) => setQuestionBankSearch(e.target.value)}
+                        placeholder="Search question bank"
+                        className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-zinc-700 dark:bg-zinc-950"
+                    />
+
+                    {questionBankLoading ? (
+                        <div className="text-sm text-zinc-500">Loading question bank...</div>
+                    ) : filteredQuestionBank.length === 0 ? (
+                        <div className="rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2 text-sm text-zinc-600 dark:border-zinc-800 dark:bg-zinc-950/60 dark:text-zinc-400">
+                            No matching questions found.
+                        </div>
+                    ) : (
+                        <div className="max-h-80 space-y-2 overflow-y-auto pr-1">
+                            {filteredQuestionBank.map((question) => {
+                                const isSelected = selectedBankQuestionId === question.id;
+                                return (
+                                    <button
+                                        key={question.id}
+                                        type="button"
+                                        onClick={() => setSelectedBankQuestionId(question.id)}
+                                        className={`w-full rounded-xl border p-3 text-left transition ${isSelected
+                                            ? "border-indigo-500 bg-indigo-50 dark:border-indigo-500 dark:bg-indigo-950/30"
+                                            : "border-zinc-200 hover:bg-zinc-50 dark:border-zinc-800 dark:hover:bg-zinc-800/60"
+                                            }`}
+                                    >
+                                        <div className="text-sm font-medium">{question.prompt}</div>
+                                        <div className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">Correct: Option {question.correctOption + 1}</div>
+                                    </button>
+                                );
+                            })}
+                        </div>
+                    )}
+                </div>
+            </Modal>
 
             <Modal
                 isOpen={isCreateQuestionModalOpen}

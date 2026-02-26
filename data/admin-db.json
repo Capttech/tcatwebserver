@@ -1,7 +1,8 @@
 {
   "counters": {
     "quizId": 1,
-    "questionId": 2
+    "questionId": 2,
+    "bankQuestionId": 1
   },
   "quizzes": [
     {
@@ -9,7 +10,9 @@
       "title": "Test",
       "description": "Thsi is a test quiz",
       "createdAt": "2026-02-26T15:00:56.964Z",
-      "updatedAt": "2026-02-26T15:07:32.455Z"
+      "updatedAt": "2026-02-26T17:37:39.280Z",
+      "quizCode": "TESTA",
+      "durationMinutes": 30
     }
   ],
   "questions": [
@@ -26,6 +29,21 @@
       "correctOption": 1,
       "createdAt": "2026-02-26T15:07:05.953Z",
       "updatedAt": "2026-02-26T15:07:05.953Z"
+    }
+  ],
+  "questionBank": [
+    {
+      "id": 1,
+      "prompt": "question 1",
+      "options": [
+        "ans",
+        "ans2",
+        "ans3",
+        "ans4"
+      ],
+      "correctOption": 0,
+      "createdAt": "2026-02-26T17:24:55.509Z",
+      "updatedAt": "2026-02-26T17:24:55.509Z"
     }
   ]
 }

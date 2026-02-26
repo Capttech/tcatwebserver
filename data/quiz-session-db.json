@@ -1,0 +1,22 @@
+{
+  "counters": {
+    "attemptId": 2
+  },
+  "attempts": [
+    {
+      "id": 2,
+      "quizId": 1,
+      "quizCode": "TESTA",
+      "participantName": "Joseph",
+      "participantKey": "joseph",
+      "startedAt": "2026-02-26T17:58:55.953Z",
+      "expiresAt": "2026-02-26T18:28:55.953Z",
+      "isCompleted": true,
+      "completedAt": "2026-02-26T17:58:57.640Z",
+      "score": 0,
+      "totalQuestions": 1,
+      "createdAt": "2026-02-26T17:58:55.953Z",
+      "updatedAt": "2026-02-26T17:58:57.640Z"
+    }
+  ]
+}
