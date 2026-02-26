@@ -39,10 +39,16 @@ export default function AdminPage() {
 
   return (
     <PageWrapper>
-      <h1 className="text-2xl font-semibold">Admin</h1>
-      <p className="text-sm text-zinc-600 dark:text-zinc-400 mt-2">Restricted area — please log in.</p>
+      <section className="space-y-6">
+        <div className="rounded-2xl border border-zinc-200/80 bg-white/80 p-6 backdrop-blur-sm dark:border-zinc-800 dark:bg-zinc-900/80">
+          <h1 className="text-2xl font-semibold tracking-tight">Admin Console</h1>
+          <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
+            Restricted area for attendance and ticket management.
+          </p>
+        </div>
 
-      {isAuth ? <AdminPanel /> : <AdminLoginForm />}
+        {isAuth ? <AdminPanel /> : <AdminLoginForm />}
+      </section>
     </PageWrapper>
   );
 }

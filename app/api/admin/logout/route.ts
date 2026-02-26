@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
+import { clearSessionCookie } from '@/app/lib/adminAuth';
 
 export async function POST() {
-  const cookie = `tcat_admin=; Path=/; HttpOnly; Max-Age=0`;
+  const cookie = clearSessionCookie();
   return NextResponse.json({ ok: true }, { headers: { 'Set-Cookie': cookie } });
 }

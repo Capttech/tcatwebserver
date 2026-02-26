@@ -1,12 +1,12 @@
 import { NextResponse } from 'next/server';
+import { buildSessionCookie } from '@/app/lib/adminAuth';
 
 export async function POST(req: Request) {
   try {
     const { username, password } = await req.json();
 
     if (username === process.env.ADMIN_USER && password === process.env.ADMIN_PASS) {
-      // Set cookie via Set-Cookie header for compatibility with runtimes
-      const cookie = `tcat_admin=1; Path=/; HttpOnly; Max-Age=${60 * 60}`;
+      const cookie = buildSessionCookie(username);
       return NextResponse.json({ ok: true }, { headers: { 'Set-Cookie': cookie } });
     }
 

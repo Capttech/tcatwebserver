@@ -1,0 +1,31 @@
+{
+  "counters": {
+    "quizId": 1,
+    "questionId": 2
+  },
+  "quizzes": [
+    {
+      "id": 1,
+      "title": "Test",
+      "description": "Thsi is a test quiz",
+      "createdAt": "2026-02-26T15:00:56.964Z",
+      "updatedAt": "2026-02-26T15:07:32.455Z"
+    }
+  ],
+  "questions": [
+    {
+      "id": 1,
+      "quizId": 1,
+      "prompt": "This is a test question",
+      "options": [
+        "answer a",
+        "answer b",
+        "anser c",
+        "answer d"
+      ],
+      "correctOption": 1,
+      "createdAt": "2026-02-26T15:07:05.953Z",
+      "updatedAt": "2026-02-26T15:07:05.953Z"
+    }
+  ]
+}
