@@ -13,6 +13,7 @@ import {
   faUsers,
   faQuestion,
   faTicket,
+  faArrowUpRightFromSquare,
 } from "@fortawesome/free-solid-svg-icons";
 
 type Option = {
@@ -35,12 +36,12 @@ export default function Home() {
       buttonLabel: "Begin Onboarding",
     },
     {
-      id: "instructors",
-      icon: <FontAwesomeIcon icon={faUsers} size="lg" className="text-indigo-600" />,
-      title: "Instructors",
-      description: "Find instructor and TA contact details, office hours, and short biographies to help you connect with course staff.",
-      href: "/instructors",
-      buttonLabel: "View Profiles",
+      id: "class-etiquette",
+      icon: <FontAwesomeIcon icon={faTicket} size="lg" className="text-indigo-600" />,
+      title: "Class Etiquette",
+      description: "Class information and expectations for student conduct, communication, and day-to-day course participation.",
+      href: "/class-etiquette",
+      buttonLabel: "View Information",
     },
     {
       id: "syllabus",
@@ -60,12 +61,12 @@ export default function Home() {
       buttonLabel: "Review Safety",
     },
     {
-      id: "class-edicate",
-      icon: <FontAwesomeIcon icon={faTicket} size="lg" className="text-indigo-600" />,
-      title: "Class Edicate",
-      description: "Class information and expectations for student conduct, communication, and day-to-day course participation.",
-      href: "/class-edicate",
-      buttonLabel: "View Information",
+      id: "instructors",
+      icon: <FontAwesomeIcon icon={faUsers} size="lg" className="text-indigo-600" />,
+      title: "Instructors",
+      description: "Find instructor and TA contact details, office hours, and short biographies to help you connect with course staff.",
+      href: "/instructors",
+      buttonLabel: "View Profiles",
     },
     {
       id: "required-materials",
@@ -107,6 +108,38 @@ export default function Home() {
       description: "View all open and closed tickets. Select a ticket to open the submission form and edit or save ticket details.",
       href: "/tickets",
       buttonLabel: "View Tickets",
+    },
+    {
+      id: "microsoft-teams",
+      icon: <FontAwesomeIcon icon={faArrowUpRightFromSquare} size="lg" className="text-indigo-600" />,
+      title: "Microsoft Teams",
+      description: "Open Microsoft Teams for class communication, announcements, and collaboration.",
+      href: "https://teams.cloud.microsoft/",
+      buttonLabel: "Open Teams",
+    },
+    {
+      id: "tbr-portal",
+      icon: <FontAwesomeIcon icon={faArrowUpRightFromSquare} size="lg" className="text-indigo-600" />,
+      title: "TBR Portal",
+      description: "Access the Tennessee Board of Regents portal for student and institutional resources.",
+      href: "https://portal.tbr.edu/web/tcat-memphis",
+      buttonLabel: "Open Portal",
+    },
+    {
+      id: "outlook",
+      icon: <FontAwesomeIcon icon={faArrowUpRightFromSquare} size="lg" className="text-indigo-600" />,
+      title: "Outlook",
+      description: "Open Outlook Mail to check course email, updates, and instructor communication.",
+      href: "https://outlook.office.com/mail",
+      buttonLabel: "Open Outlook",
+    },
+    {
+      id: "comptia",
+      icon: <FontAwesomeIcon icon={faArrowUpRightFromSquare} size="lg" className="text-indigo-600" />,
+      title: "CompTIA",
+      description: "Launch the CompTIA learning platform for course-aligned training and resources.",
+      href: "https://platform.comptia.org/v6_0_712/index.html",
+      buttonLabel: "Open CompTIA",
     },
 
   ];
@@ -158,18 +191,32 @@ export default function Home() {
               </div>
 
               <div className="mt-4 space-y-3">
-                {options.slice(0, 10).map((opt) => (
-                  <Link key={opt.id} href={opt.href} className="block">
-                    <WebCard title={opt.title} className="w-full h-full">
-                      <div className="flex items-start gap-3">
-                        <div className="w-10 h-10 flex items-center justify-center text-indigo-600">{opt.icon}</div>
-                        <div>
-                          <div className="font-medium text-zinc-900 dark:text-white">{opt.title}</div>
-                          <div className="text-sm text-zinc-600 dark:text-zinc-400">{opt.description}</div>
+                {options.map((opt) => (
+                  opt.href.startsWith("/") ? (
+                    <Link key={opt.id} href={opt.href} className="block">
+                      <WebCard title={opt.title} className="w-full h-full">
+                        <div className="flex items-start gap-3">
+                          <div className="w-10 h-10 flex items-center justify-center text-indigo-600">{opt.icon}</div>
+                          <div>
+                            <div className="font-medium text-zinc-900 dark:text-white">{opt.title}</div>
+                            <div className="text-sm text-zinc-600 dark:text-zinc-400">{opt.description}</div>
+                          </div>
                         </div>
-                      </div>
-                    </WebCard>
-                  </Link>
+                      </WebCard>
+                    </Link>
+                  ) : (
+                    <a key={opt.id} href={opt.href} target="_blank" rel="noopener noreferrer" className="block">
+                      <WebCard title={opt.title} className="w-full h-full">
+                        <div className="flex items-start gap-3">
+                          <div className="w-10 h-10 flex items-center justify-center text-indigo-600">{opt.icon}</div>
+                          <div>
+                            <div className="font-medium text-zinc-900 dark:text-white">{opt.title}</div>
+                            <div className="text-sm text-zinc-600 dark:text-zinc-400">{opt.description}</div>
+                          </div>
+                        </div>
+                      </WebCard>
+                    </a>
+                  )
                 ))}
               </div>
             </div>
@@ -226,7 +273,7 @@ export default function Home() {
 
             <div className="mt-6 space-y-4">
               {(() => {
-                const items = options.slice(0, 10);
+                const items = options;
                 const rows: typeof items[] = [];
                 let i = 0;
                 while (i + 4 <= items.length) {
@@ -259,17 +306,31 @@ export default function Home() {
                       style={{ display: "grid", gridTemplateColumns: `repeat(${rowLen}, minmax(220px, 360px))`, gap: "1rem", justifyContent: "center" }}
                     >
                       {row.map((opt) => (
-                        <Link key={opt.id} href={opt.href} className={`w-full max-w-[360px] block`}>
-                          <WebCard title={opt.title} className={`w-full h-full`}>
-                            <div className="flex items-start gap-3">
-                              <div className="w-10 h-10 flex items-center justify-center text-indigo-600">{opt.icon}</div>
-                              <div>
-                                <div className="font-medium text-zinc-900 dark:text-white">{opt.title}</div>
-                                <div className="text-sm text-zinc-600 dark:text-zinc-400">{opt.description}</div>
+                        opt.href.startsWith("/") ? (
+                          <Link key={opt.id} href={opt.href} className={`w-full max-w-[360px] block`}>
+                            <WebCard title={opt.title} className={`w-full h-full`}>
+                              <div className="flex items-start gap-3">
+                                <div className="w-10 h-10 flex items-center justify-center text-indigo-600">{opt.icon}</div>
+                                <div>
+                                  <div className="font-medium text-zinc-900 dark:text-white">{opt.title}</div>
+                                  <div className="text-sm text-zinc-600 dark:text-zinc-400">{opt.description}</div>
+                                </div>
                               </div>
-                            </div>
-                          </WebCard>
-                        </Link>
+                            </WebCard>
+                          </Link>
+                        ) : (
+                          <a key={opt.id} href={opt.href} target="_blank" rel="noopener noreferrer" className={`w-full max-w-[360px] block`}>
+                            <WebCard title={opt.title} className={`w-full h-full`}>
+                              <div className="flex items-start gap-3">
+                                <div className="w-10 h-10 flex items-center justify-center text-indigo-600">{opt.icon}</div>
+                                <div>
+                                  <div className="font-medium text-zinc-900 dark:text-white">{opt.title}</div>
+                                  <div className="text-sm text-zinc-600 dark:text-zinc-400">{opt.description}</div>
+                                </div>
+                              </div>
+                            </WebCard>
+                          </a>
+                        )
                       ))}
                     </div>
                   );

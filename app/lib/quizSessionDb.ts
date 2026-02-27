@@ -143,6 +143,13 @@ export function getLatestAttempt(quizId: number, participantName: string) {
         .sort((a, b) => b.createdAt.localeCompare(a.createdAt))[0] || null;
 }
 
+export function listAttempts() {
+    const db = readDb();
+    return db.attempts
+        .slice()
+        .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
+}
+
 export function createAttempt(input: {
     quizId: number;
     quizCode: string;

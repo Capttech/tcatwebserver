@@ -2,7 +2,7 @@ import SiteHeader from "../components/SiteHeader";
 import PageWrapper from "../components/PageWrapper";
 import WebCard from "../components/WebCard";
 
-export default function ClassEdicatePage() {
+export default function ClassEtiquettePage() {
     const etiquetteItems = [
         {
             title: "Body language",
@@ -99,7 +99,7 @@ export default function ClassEdicatePage() {
     return (
         <PageWrapper>
             <SiteHeader
-                title="Class Edicate"
+                title="Class Etiquette"
                 subtitle="Class information and expectations for professional behavior in class and workplace settings."
             />
 
@@ -112,7 +112,7 @@ export default function ClassEdicatePage() {
             </div>
 
             <div className="mt-6">
-                <WebCard id="download-class-edicate" title="Download Class Etiquette PDF">
+                <WebCard id="download-class-etiquette" title="Download Class Etiquette PDF">
                     <p>You can download the full class etiquette PDF for offline viewing or printing.</p>
                     <p className="mt-3"><a href="/class_etiquette.pdf" download className="text-indigo-300 underline font-semibold">Download class etiquette (class_etiquette.pdf)</a></p>
                 </WebCard>

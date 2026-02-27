@@ -58,6 +58,13 @@ type AdminBankQuestion = {
     updatedAt: string;
 };
 
+type AdminQuizGrade = {
+    quizId: number;
+    title: string;
+    quizCode: string;
+    submissionCount: number;
+};
+
 type QuestionFormState = {
     prompt: string;
     options: [string, string, string, string];
@@ -82,7 +89,7 @@ const EMPTY_QUESTION: QuestionFormState = {
 
 export default function AdminPanel() {
     const [loading, setLoading] = useState(false);
-    const [activeTab, setActiveTab] = useState<"tickets" | "quizzes" | "questionBank">("tickets");
+    const [activeTab, setActiveTab] = useState<"tickets" | "quizzes" | "questionBank" | "grades">("tickets");
 
     const [tickets, setTickets] = useState<Ticket[]>([]);
     const [ticketsLoading, setTicketsLoading] = useState(false);
@@ -111,6 +118,10 @@ export default function AdminPanel() {
     const [isEditQuestionBankModalOpen, setIsEditQuestionBankModalOpen] = useState(false);
     const [activeQuestionBankId, setActiveQuestionBankId] = useState<number | null>(null);
     const [questionBankForm, setQuestionBankForm] = useState<QuestionFormState>(EMPTY_QUESTION);
+
+    const [quizGrades, setQuizGrades] = useState<AdminQuizGrade[]>([]);
+    const [gradesLoading, setGradesLoading] = useState(false);
+    const [gradesError, setGradesError] = useState<string | null>(null);
 
     const loadTickets = useCallback(async () => {
         setTicketsLoading(true);
@@ -197,6 +208,35 @@ export default function AdminPanel() {
     useEffect(() => {
         loadQuestionBank();
     }, [loadQuestionBank]);
+
+    const loadGrades = useCallback(async () => {
+        setGradesLoading(true);
+        setGradesError(null);
+
+        try {
+            const res = await fetch("/api/admin/grades", {
+                method: "GET",
+                credentials: "include",
+                cache: "no-store",
+            });
+            const body = await res.json().catch(() => null);
+
+            if (!res.ok) {
+                throw new Error(body?.error || `Failed to load grades (${res.status})`);
+            }
+
+            const nextGrades = Array.isArray(body?.quizzes) ? body.quizzes : [];
+            setQuizGrades(nextGrades);
+        } catch (err: any) {
+            setGradesError(err?.message || "Failed to load grades.");
+        } finally {
+            setGradesLoading(false);
+        }
+    }, []);
+
+    useEffect(() => {
+        loadGrades();
+    }, [loadGrades]);
 
     async function logout() {
         setLoading(true);
@@ -343,7 +383,7 @@ export default function AdminPanel() {
             setNewQuizCode("");
             setNewQuizDurationMinutes("30");
             setIsCreateQuizModalOpen(false);
-            await loadQuizzes();
+            await Promise.all([loadQuizzes(), loadGrades()]);
         } catch (err: any) {
             setActionError(err?.message || "Failed to create quiz.");
         } finally {
@@ -531,6 +571,15 @@ export default function AdminPanel() {
                                 }`}
                         >
                             Quizzes
+                        </button>
+                        <button
+                            onClick={() => setActiveTab("grades")}
+                            className={`block w-full rounded-lg px-3 py-2 text-left text-sm transition ${activeTab === "grades"
+                                ? "bg-indigo-100 text-indigo-700 dark:bg-indigo-950/60 dark:text-indigo-300"
+                                : "text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-950/40"
+                                }`}
+                        >
+                            Grades
                         </button>
                         <button
                             onClick={() => setActiveTab("questionBank")}
@@ -768,6 +817,65 @@ export default function AdminPanel() {
                                                     Edit
                                                 </Link>
                                             </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+                    </>
+                )}
+
+                {activeTab === "grades" && (
+                    <>
+                        <div className="rounded-2xl border border-zinc-200/80 bg-white/90 p-5 shadow-sm dark:border-zinc-800 dark:bg-zinc-900/80">
+                            <div className="flex items-start justify-between gap-3">
+                                <div>
+                                    <h2 className="text-lg font-semibold tracking-tight">Grades</h2>
+                                    <p className="text-sm text-zinc-600 dark:text-zinc-400">See quizzes and review all submitted quiz attempts.</p>
+                                </div>
+                                <button
+                                    onClick={loadGrades}
+                                    disabled={gradesLoading}
+                                    className="rounded-lg border border-zinc-300 px-3 py-2 text-sm font-medium transition hover:bg-zinc-50 disabled:cursor-not-allowed disabled:opacity-70 dark:border-zinc-700 dark:hover:bg-zinc-800"
+                                >
+                                    {gradesLoading ? "Refreshing..." : "Refresh"}
+                                </button>
+                            </div>
+                        </div>
+
+                        {gradesError && (
+                            <div className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700 dark:border-red-900 dark:bg-red-950/50 dark:text-red-300">
+                                {gradesError}
+                            </div>
+                        )}
+
+                        <div className="rounded-2xl border border-zinc-200/80 bg-white/90 p-5 shadow-sm dark:border-zinc-800 dark:bg-zinc-900/80">
+                            <h3 className="font-medium tracking-tight">Quizzes</h3>
+
+                            {gradesLoading ? (
+                                <div className="mt-3 text-sm text-zinc-500">Loading grades...</div>
+                            ) : quizGrades.length === 0 ? (
+                                <div className="mt-3 rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2 text-sm text-zinc-600 dark:border-zinc-800 dark:bg-zinc-950/60 dark:text-zinc-400">
+                                    No quizzes available.
+                                </div>
+                            ) : (
+                                <div className="mt-3 space-y-2">
+                                    {quizGrades.map((quizGrade) => (
+                                        <div
+                                            key={quizGrade.quizId}
+                                            className="flex items-center justify-between gap-3 rounded-xl border border-zinc-200 px-3 py-2 dark:border-zinc-800"
+                                        >
+                                            <div>
+                                                <div className="text-sm font-medium">{quizGrade.title}</div>
+                                                <div className="text-xs text-zinc-500">Code: {quizGrade.quizCode}</div>
+                                                <div className="mt-1 text-xs text-zinc-600 dark:text-zinc-400">Submissions: {quizGrade.submissionCount}</div>
+                                            </div>
+                                            <Link
+                                                href={`/admin/grades/${quizGrade.quizId}`}
+                                                className="rounded-lg border border-zinc-300 px-3 py-1.5 text-xs font-medium transition hover:bg-zinc-50 dark:border-zinc-700 dark:hover:bg-zinc-800"
+                                            >
+                                                View Submissions
+                                            </Link>
                                         </div>
                                     ))}
                                 </div>

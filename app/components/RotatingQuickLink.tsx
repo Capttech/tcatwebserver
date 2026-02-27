@@ -56,7 +56,7 @@ export default function RotatingQuickLink({ options, inline, full }: { options: 
             {opt.buttonLabel}
         </Link>
     ) : (
-        <a href={opt.href} className={buttonClass}>
+        <a href={opt.href} target="_blank" rel="noopener noreferrer" className={buttonClass}>
             {opt.buttonLabel}
         </a>
     );
