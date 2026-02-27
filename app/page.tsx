@@ -1,9 +1,12 @@
+"use client";
+
 import Link from "next/link";
 import SiteHeader from "./components/SiteHeader";
 import PageWrapper from "./components/PageWrapper";
-import { JSX } from "react";
+import { JSX, useState } from "react";
 import RotatingQuickLink from "./components/RotatingQuickLink";
 import WebCard from "./components/WebCard";
+import Modal from "./components/Modal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faClipboardList,
@@ -26,6 +29,16 @@ type Option = {
 };
 
 export default function Home() {
+  const [isQuizletsModalOpen, setIsQuizletsModalOpen] = useState(false);
+  const quizletLinks = [
+    {
+      id: "ports",
+      title: "Ports Quizlet",
+      href: "/quizlets/ports",
+      description: "Well-known networking ports and common services.",
+    },
+  ];
+
   const options: Option[] = [
     {
       id: "onboarding",
@@ -102,6 +115,14 @@ export default function Home() {
       buttonLabel: "Start Quiz",
     },
     {
+      id: "quizlets",
+      icon: <FontAwesomeIcon icon={faBookOpen} size="lg" className="text-indigo-600" />,
+      title: "Quizlets",
+      description: "Open Quizlets study links and launch the selected set from a quick modal.",
+      href: "/quizlets/ports",
+      buttonLabel: "Open Quizlets",
+    },
+    {
       id: "ticket-submission",
       icon: <FontAwesomeIcon icon={faClipboardList} size="lg" className="text-indigo-600" />,
       title: "Tickets",
@@ -143,6 +164,8 @@ export default function Home() {
     },
 
   ];
+
+  const rotatingOptions = options.filter((option) => option.id !== "quizlets");
 
   const getButtonClass = (id: string) => {
     return "inline-flex items-center rounded-md bg-indigo-600 px-4 py-2 text-white hover:bg-indigo-700 transition-colors font-medium w-full justify-center md:w-auto";
@@ -187,12 +210,24 @@ export default function Home() {
               </div>
 
               <div className="mt-4">
-                <RotatingQuickLink options={options} inline />
+                <RotatingQuickLink options={rotatingOptions} inline />
               </div>
 
               <div className="mt-4 space-y-3">
                 {options.map((opt) => (
-                  opt.href.startsWith("/") ? (
+                  opt.id === "quizlets" ? (
+                    <button key={opt.id} onClick={() => setIsQuizletsModalOpen(true)} className="block w-full text-left">
+                      <WebCard title={opt.title} className="w-full h-full">
+                        <div className="flex items-start gap-3">
+                          <div className="w-10 h-10 flex items-center justify-center text-indigo-600">{opt.icon}</div>
+                          <div>
+                            <div className="font-medium text-zinc-900 dark:text-white">{opt.title}</div>
+                            <div className="text-sm text-zinc-600 dark:text-zinc-400">{opt.description}</div>
+                          </div>
+                        </div>
+                      </WebCard>
+                    </button>
+                  ) : opt.href.startsWith("/") ? (
                     <Link key={opt.id} href={opt.href} className="block">
                       <WebCard title={opt.title} className="w-full h-full">
                         <div className="flex items-start gap-3">
@@ -261,7 +296,7 @@ export default function Home() {
 
             <div className="relative">
               <div className="rounded-3xl bg-gradient-to-br from-indigo-600 to-sky-500 text-white shadow-xl min-h-[160px] overflow-hidden">
-                <RotatingQuickLink options={options} full />
+                <RotatingQuickLink options={rotatingOptions} full />
               </div>
             </div>
           </section>
@@ -306,7 +341,19 @@ export default function Home() {
                       style={{ display: "grid", gridTemplateColumns: `repeat(${rowLen}, minmax(220px, 360px))`, gap: "1rem", justifyContent: "center" }}
                     >
                       {row.map((opt) => (
-                        opt.href.startsWith("/") ? (
+                        opt.id === "quizlets" ? (
+                          <button key={opt.id} onClick={() => setIsQuizletsModalOpen(true)} className="w-full max-w-[360px] block text-left">
+                            <WebCard title={opt.title} className={`w-full h-full`}>
+                              <div className="flex items-start gap-3">
+                                <div className="w-10 h-10 flex items-center justify-center text-indigo-600">{opt.icon}</div>
+                                <div>
+                                  <div className="font-medium text-zinc-900 dark:text-white">{opt.title}</div>
+                                  <div className="text-sm text-zinc-600 dark:text-zinc-400">{opt.description}</div>
+                                </div>
+                              </div>
+                            </WebCard>
+                          </button>
+                        ) : opt.href.startsWith("/") ? (
                           <Link key={opt.id} href={opt.href} className={`w-full max-w-[360px] block`}>
                             <WebCard title={opt.title} className={`w-full h-full`}>
                               <div className="flex items-start gap-3">
@@ -343,6 +390,36 @@ export default function Home() {
         <footer className="mt-12 mb-8 text-center text-sm text-zinc-600 dark:text-zinc-400">
           CIT Course Portal • Contact instructors for assistance.
         </footer>
+
+        <Modal
+          isOpen={isQuizletsModalOpen}
+          onClose={() => setIsQuizletsModalOpen(false)}
+          title="Quizlets"
+          subtitle="Select a set"
+        >
+          <div className="space-y-3">
+            {quizletLinks.map((item) => (
+              <div
+                key={item.id}
+                className="flex items-center justify-between gap-4 rounded-xl border border-zinc-200 bg-white px-4 py-3 shadow-sm dark:border-zinc-800 dark:bg-zinc-950/40"
+              >
+                <div>
+                  <p className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">{item.title}</p>
+                  <p className="mt-1 text-xs text-zinc-600 dark:text-zinc-400">{item.description}</p>
+                  <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-500">{item.href}</p>
+                </div>
+
+                <Link
+                  href={item.href}
+                  className="inline-flex items-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-medium text-white transition hover:bg-indigo-700"
+                  onClick={() => setIsQuizletsModalOpen(false)}
+                >
+                  Go to
+                </Link>
+              </div>
+            ))}
+          </div>
+        </Modal>
       </PageWrapper>
     </div>
   );
