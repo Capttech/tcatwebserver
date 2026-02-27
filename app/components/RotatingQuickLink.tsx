@@ -65,8 +65,10 @@ export default function RotatingQuickLink({ options, inline, full }: { options: 
         <div key={opt.id} className={rootClass}>
             <div className="flex items-start gap-4 w-full">
                 <div className={iconClass}>
-                    {React.isValidElement(opt.icon)
-                        ? React.cloneElement(opt.icon as React.ReactElement, { className: `h-6 w-6 ${inline || full ? 'text-white' : 'text-indigo-600'}` })
+                    {React.isValidElement<{ className?: string }>(opt.icon)
+                        ? React.cloneElement(opt.icon, {
+                            className: `h-6 w-6 ${inline || full ? 'text-white' : 'text-indigo-600'} ${opt.icon.props.className ?? ""}`.trim(),
+                        })
                         : opt.icon}
                 </div>
                 <div className="flex-1">
