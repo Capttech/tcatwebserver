@@ -90,7 +90,7 @@ export default function Home() {
       icon: <FontAwesomeIcon icon={faGamepad} size="lg" className="text-indigo-600" />,
       title: "Kahoot Review Game",
       description: "Join an interactive review session to reinforce key concepts. Supports live play and practice modes for individual or group study.",
-      href: "/coming-soon",
+      href: "/game",
       buttonLabel: "Launch Review",
     },
     {
