@@ -1,3 +1,43 @@
+"use client";
+
+import { FormEvent, useEffect, useMemo, useState } from "react";
+import PageWrapper from "../../components/PageWrapper";
+import SiteHeader from "../../components/SiteHeader";
+import Modal from "../../components/Modal";
+
+type GridBlockData = {
+    vlan: string;
+    switchName: string;
+    portNumber: string;
+};
+
+const GRID_ROWS = 5;
+const GRID_COLS = 8;
+const GRID_TOTAL = GRID_ROWS * GRID_COLS + 1;
+
+const emptyBlock = (): GridBlockData => ({
+    vlan: "",
+    switchName: "",
+    portNumber: "",
+});
+
+const normalizeBlocks = (input: unknown): GridBlockData[] => {
+    if (!Array.isArray(input)) {
+        return Array.from({ length: GRID_TOTAL }, emptyBlock);
+    }
+
+    return Array.from({ length: GRID_TOTAL }, (_, idx) => {
+        const item = input[idx];
+        if (!item || typeof item !== "object") return emptyBlock();
+
+        const block = item as Partial<GridBlockData>;
+        return {
+            vlan: typeof block.vlan === "string" ? block.vlan : "",
+            switchName: typeof block.switchName === "string" ? block.switchName : "",
+            portNumber: typeof block.portNumber === "string" ? block.portNumber : "",
+        };
+    });
+};
 
 export default function TempPage() {
     const [blocks, setBlocks] = useState<GridBlockData[]>(() => Array.from({ length: GRID_TOTAL }, emptyBlock));
@@ -16,7 +56,7 @@ export default function TempPage() {
             setLoadError("");
 
             try {
-                const res = await fetch("/api/temp-grid", { cache: "no-store" });
+                const res = await fetch("/api/utilities/classroom_netmap", { cache: "no-store" });
                 if (!res.ok) throw new Error("Failed request");
 
                 const data = await res.json();
@@ -131,7 +171,7 @@ export default function TempPage() {
         setIsSaving(true);
 
         try {
-            const res = await fetch("/api/temp-grid", {
+            const res = await fetch("/api/utilities/classroom_netmap", {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
