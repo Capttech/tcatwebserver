@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation';
 import PageWrapper from '@/app/components/PageWrapper';
-import AdminQuizSubmissions from '@/app/components/AdminQuizSubmissions';
+import AdminQuizSubmissions from '@/app/admin/components/QuizSubmissions';
 import { isAdminAuthenticated } from '@/app/lib/adminAuth';
 
 export const dynamic = 'force-dynamic';

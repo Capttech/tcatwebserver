@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getQuizByCode } from '@/app/lib/adminDb';
+import { getQuizByCode } from '@/app/lib/quizDb';
 import {
     createAttempt,
     getLatestAttempt,
@@ -29,105 +29,107 @@ function sanitizeQuiz(quiz: any, includeQuestions: boolean) {
 }
 
 export async function POST(req: Request) {
-    try {
-        const body = await req.json();
-        const quizCode = String(body?.quizCode || '').trim().toUpperCase();
-        const participantName = normalizeParticipantName(String(body?.participantName || ''));
-        const start = body?.start === true;
+    return NextResponse.json({ ok: false, error: 'Unavailable' }, { status: 503 });
 
-        if (!quizCode) {
-            return NextResponse.json({ ok: false, error: 'Quiz code is required.' }, { status: 400 });
-        }
+    // try {
+    //     const body = await req.json();
+    //     const quizCode = String(body?.quizCode || '').trim().toUpperCase();
+    //     const participantName = normalizeParticipantName(String(body?.participantName || ''));
+    //     const start = body?.start === true;
 
-        if (!participantName) {
-            return NextResponse.json({ ok: false, error: 'Name is required.' }, { status: 400 });
-        }
+    //     if (!quizCode) {
+    //         return NextResponse.json({ ok: false, error: 'Quiz code is required.' }, { status: 400 });
+    //     }
 
-        const quiz = getQuizByCode(quizCode);
-        if (!quiz) {
-            return NextResponse.json({ ok: false, error: 'Invalid quiz code.' }, { status: 404 });
-        }
+    //     if (!participantName) {
+    //         return NextResponse.json({ ok: false, error: 'Name is required.' }, { status: 400 });
+    //     }
 
-        const latestAttempt = getLatestAttempt(quiz.id, participantName);
-        const expired = latestAttempt ? isAttemptExpired(latestAttempt) : false;
+    //     const quiz = getQuizByCode(quizCode);
+    //     if (!quiz) {
+    //         return NextResponse.json({ ok: false, error: 'Invalid quiz code.' }, { status: 404 });
+    //     }
 
-        if (!start) {
-            if (latestAttempt?.isCompleted) {
-                return NextResponse.json({
-                    ok: true,
-                    status: 'completed',
-                    attempt: latestAttempt,
-                    quiz: sanitizeQuiz(quiz, false),
-                });
-            }
+    //     const latestAttempt = getLatestAttempt(quiz.id, participantName);
+    //     const expired = latestAttempt ? isAttemptExpired(latestAttempt) : false;
 
-            if (latestAttempt && expired) {
-                return NextResponse.json({
-                    ok: true,
-                    status: 'expired',
-                    attempt: latestAttempt,
-                    quiz: sanitizeQuiz(quiz, false),
-                });
-            }
+    //     if (!start) {
+    //         if (latestAttempt?.isCompleted) {
+    //             return NextResponse.json({
+    //                 ok: true,
+    //                 status: 'completed',
+    //                 attempt: latestAttempt,
+    //                 quiz: sanitizeQuiz(quiz, false),
+    //             });
+    //         }
 
-            if (latestAttempt) {
-                return NextResponse.json({
-                    ok: true,
-                    status: 'active',
-                    attempt: latestAttempt,
-                    quiz: sanitizeQuiz(quiz, true),
-                });
-            }
+    //         if (latestAttempt && expired) {
+    //             return NextResponse.json({
+    //                 ok: true,
+    //                 status: 'expired',
+    //                 attempt: latestAttempt,
+    //                 quiz: sanitizeQuiz(quiz, false),
+    //             });
+    //         }
 
-            return NextResponse.json({
-                ok: true,
-                status: 'ready',
-                quiz: sanitizeQuiz(quiz, false),
-            });
-        }
+    //         if (latestAttempt) {
+    //             return NextResponse.json({
+    //                 ok: true,
+    //                 status: 'active',
+    //                 attempt: latestAttempt,
+    //                 quiz: sanitizeQuiz(quiz, true),
+    //             });
+    //         }
 
-        if (latestAttempt?.isCompleted) {
-            return NextResponse.json({
-                ok: true,
-                status: 'completed',
-                attempt: latestAttempt,
-                quiz: sanitizeQuiz(quiz, false),
-            });
-        }
+    //         return NextResponse.json({
+    //             ok: true,
+    //             status: 'ready',
+    //             quiz: sanitizeQuiz(quiz, false),
+    //         });
+    //     }
 
-        if (latestAttempt && expired) {
-            return NextResponse.json({
-                ok: true,
-                status: 'expired',
-                attempt: latestAttempt,
-                quiz: sanitizeQuiz(quiz, false),
-            });
-        }
+    //     if (latestAttempt?.isCompleted) {
+    //         return NextResponse.json({
+    //             ok: true,
+    //             status: 'completed',
+    //             attempt: latestAttempt,
+    //             quiz: sanitizeQuiz(quiz, false),
+    //         });
+    //     }
 
-        if (latestAttempt) {
-            return NextResponse.json({
-                ok: true,
-                status: 'active',
-                attempt: latestAttempt,
-                quiz: sanitizeQuiz(quiz, true),
-            });
-        }
+    //     if (latestAttempt && expired) {
+    //         return NextResponse.json({
+    //             ok: true,
+    //             status: 'expired',
+    //             attempt: latestAttempt,
+    //             quiz: sanitizeQuiz(quiz, false),
+    //         });
+    //     }
 
-        const durationMinutes = Number.isInteger(quiz.durationMinutes) && quiz.durationMinutes > 0 ? quiz.durationMinutes : 30;
-        const attempt = createAttempt({
-            quizId: quiz.id,
-            quizCode: quiz.quizCode,
-            participantName,
-            durationMinutes,
-        });
+    //     if (latestAttempt) {
+    //         return NextResponse.json({
+    //             ok: true,
+    //             status: 'active',
+    //             attempt: latestAttempt,
+    //             quiz: sanitizeQuiz(quiz, true),
+    //         });
+    //     }
 
-        return NextResponse.json({
-            ok: true,
-            status: 'active',
-            attempt,
-            quiz: sanitizeQuiz(quiz, true),
-        });
-    } catch {
-        return NextResponse.json({ ok: false, error: 'Invalid request body.' }, { status: 400 });
-    }
+    //     const durationMinutes = Number.isInteger(quiz.durationMinutes) && quiz.durationMinutes > 0 ? quiz.durationMinutes : 30;
+    //     const attempt = createAttempt({
+    //         quizId: quiz.id,
+    //         quizCode: quiz.quizCode,
+    //         participantName,
+    //         durationMinutes,
+    //     });
+
+    //     return NextResponse.json({
+    //         ok: true,
+    //         status: 'active',
+    //         attempt,
+    //         quiz: sanitizeQuiz(quiz, true),
+    //     });
+    // } catch {
+    //     return NextResponse.json({ ok: false, error: 'Invalid request body.' }, { status: 400 });
+    // }
 }

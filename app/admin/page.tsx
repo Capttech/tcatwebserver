@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from 'react';
-import AdminLoginForm from '../components/AdminLoginForm';
-import AdminPanel from '../components/AdminPanel';
+import AdminLoginForm from './components/LoginForm';
+import AdminPanel from './components/Panel';
 import PageWrapper from '../components/PageWrapper';
 
 export default function AdminPage() {

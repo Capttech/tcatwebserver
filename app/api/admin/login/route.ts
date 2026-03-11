@@ -1,9 +1,9 @@
 import { NextResponse } from 'next/server';
 import { buildSessionCookie } from '@/app/lib/adminAuth';
 
-export async function POST(req: Request) {
+export async function POST(request: Request) {
   try {
-    const { username, password } = await req.json();
+    const { username, password } = await request.json();
 
     if (username === process.env.ADMIN_USER && password === process.env.ADMIN_PASS) {
       const cookie = buildSessionCookie(username);

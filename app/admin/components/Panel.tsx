@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { FormEvent, useCallback, useEffect, useState } from "react";
-import Modal from "./Modal";
+import Modal from "../../components/Modal";
 
 type MatchPair = { title: string; imageId: number | null };
 

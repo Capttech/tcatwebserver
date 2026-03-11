@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { deleteQuiz, getQuiz, updateQuiz } from '@/app/lib/adminDb';
+import { deleteQuiz, getQuiz, updateQuiz } from '@/app/lib/adminDB';
 import { isAdminAuthenticated } from '@/app/lib/adminAuth';
 
 export const runtime = 'nodejs';

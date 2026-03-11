@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation';
-import AdminTicketEditor from '@/app/components/AdminTicketEditor';
+import AdminTicketEditor from '@/app/admin/components/TicketEditor';
 import PageWrapper from '@/app/components/PageWrapper';
 import { isAdminAuthenticated } from '@/app/lib/adminAuth';
 
