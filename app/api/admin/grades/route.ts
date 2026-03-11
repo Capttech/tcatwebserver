@@ -12,7 +12,7 @@ export async function GET() {
     }
 
     const quizzes = listQuizzes();
-    const completedAttempts = listAttempts().filter((attempt) => attempt.isCompleted);
+    const completedAttempts = (await listAttempts()).filter((attempt) => attempt.isCompleted);
 
     const grades = quizzes.map((quiz) => {
         const submissions = completedAttempts
