@@ -2,44 +2,106 @@ import mysql from "@/lib/db";
 
 export async function listQuestionBank() {
     const [rows] = await mysql.query(
-        "SELECT id, prompt, options, correctOption, createdAt, updatedAt FROM question_bank ORDER BY updatedAt DESC"
+        `SELECT qb.*, img.url as imageUrl, img.alt as imageAlt
+         FROM question_bank qb
+         LEFT JOIN images img ON qb.imageId = img.id
+         ORDER BY qb.updatedAt DESC`
     );
+    // For match type, fetch pairs
+    for (const row of rows) {
+        if (row.type === 'match') {
+            const [pairs] = await mysql.query(
+                `SELECT mp.id, mp.title, img.url as imageUrl, img.alt as imageAlt
+                 FROM match_pairs mp
+                 LEFT JOIN images img ON mp.imageId = img.id
+                 WHERE mp.questionBankId = ?`,
+                [row.id]
+            );
+            row.matchPairs = pairs;
+        }
+    }
     return rows;
 }
 
 export async function getQuestionBankQuestion(id: number) {
     const [rows] = await mysql.query(
-        "SELECT id, prompt, options, correctOption, createdAt, updatedAt FROM question_bank WHERE id = ?",
+        `SELECT qb.*, img.url as imageUrl, img.alt as imageAlt
+         FROM question_bank qb
+         LEFT JOIN images img ON qb.imageId = img.id
+         WHERE qb.id = ?`,
         [id]
     );
-    return rows[0] || null;
+    const question = rows[0] || null;
+    if (question && question.type === 'match') {
+        const [pairs] = await mysql.query(
+            `SELECT mp.id, mp.title, img.url as imageUrl, img.alt as imageAlt
+             FROM match_pairs mp
+             LEFT JOIN images img ON mp.imageId = img.id
+             WHERE mp.questionBankId = ?`,
+            [id]
+        );
+        question.matchPairs = pairs;
+    }
+    return question;
 }
 
-export async function createQuestionBankQuestion({ prompt, options, correctOption }: { prompt: string; options: [string, string, string, string]; correctOption: number; }) {
+// input: { type, prompt, options, correctOption, correctOptions, imageId, matchPairs }
+export async function createQuestionBankQuestion(input: any) {
     const now = new Date();
     const [_, meta] = await mysql.query(
-        "INSERT INTO question_bank (prompt, options, correctOption, createdAt, updatedAt) VALUES (?, ?, ?, ?, ?)",
-        [prompt, JSON.stringify(options), correctOption, now, now]
+        `INSERT INTO question_bank (type, prompt, options, correctOption, correctOptions, imageId, createdAt, updatedAt)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+        [
+            input.type,
+            input.prompt,
+            input.options ? JSON.stringify(input.options) : null,
+            input.correctOption ?? null,
+            input.correctOptions ? JSON.stringify(input.correctOptions) : null,
+            input.imageId ?? null,
+            now,
+            now
+        ]
     );
-    // meta.insertId is available as the second element (ResultSetHeader)
-    // @ts-ignore
-    return getQuestionBankQuestion(meta.insertId);
+    const questionId = meta.insertId;
+    // If matchPairs provided, insert them
+    if (input.type === 'match' && Array.isArray(input.matchPairs)) {
+        for (const pair of input.matchPairs) {
+            await mysql.query(
+                `INSERT INTO match_pairs (questionBankId, title, imageId, createdAt) VALUES (?, ?, ?, ?)`,
+                [questionId, pair.title, pair.imageId, now]
+            );
+        }
+    }
+    return getQuestionBankQuestion(questionId);
 }
 
-export async function updateQuestionBankQuestion(id: number, { prompt, options, correctOption }: { prompt?: string; options?: [string, string, string, string]; correctOption?: number; }) {
+// input: { type, prompt, options, correctOption, correctOptions, imageId, matchPairs }
+export async function updateQuestionBankQuestion(id: number, input: any) {
     const fields = [];
     const values = [];
-    if (prompt !== undefined) {
+    if (input.type !== undefined) {
+        fields.push("type = ?");
+        values.push(input.type);
+    }
+    if (input.prompt !== undefined) {
         fields.push("prompt = ?");
-        values.push(prompt);
+        values.push(input.prompt);
     }
-    if (options !== undefined) {
+    if (input.options !== undefined) {
         fields.push("options = ?");
-        values.push(JSON.stringify(options));
+        values.push(JSON.stringify(input.options));
     }
-    if (correctOption !== undefined) {
+    if (input.correctOption !== undefined) {
         fields.push("correctOption = ?");
-        values.push(correctOption);
+        values.push(input.correctOption);
+    }
+    if (input.correctOptions !== undefined) {
+        fields.push("correctOptions = ?");
+        values.push(JSON.stringify(input.correctOptions));
+    }
+    if (input.imageId !== undefined) {
+        fields.push("imageId = ?");
+        values.push(input.imageId);
     }
     if (fields.length === 0) return null;
     fields.push("updatedAt = ?");
@@ -49,6 +111,17 @@ export async function updateQuestionBankQuestion(id: number, { prompt, options, 
         `UPDATE question_bank SET ${fields.join(", ")} WHERE id = ?`,
         values
     );
+    // For matchPairs, delete old and insert new if provided
+    if (input.type === 'match' && Array.isArray(input.matchPairs)) {
+        await mysql.query(`DELETE FROM match_pairs WHERE questionBankId = ?`, [id]);
+        const now = new Date();
+        for (const pair of input.matchPairs) {
+            await mysql.query(
+                `INSERT INTO match_pairs (questionBankId, title, imageId, createdAt) VALUES (?, ?, ?, ?)`,
+                [id, pair.title, pair.imageId, now]
+            );
+        }
+    }
     return getQuestionBankQuestion(id);
 }
 

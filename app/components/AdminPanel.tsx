@@ -3,6 +3,8 @@ import Link from "next/link";
 import { FormEvent, useCallback, useEffect, useState } from "react";
 import Modal from "./Modal";
 
+type MatchPair = { title: string; imageId: number | null };
+
 type TicketStatus = "open" | "close";
 
 type Ticket = {
@@ -32,7 +34,9 @@ type AdminQuestion = {
     id: number;
     quizId: number;
     prompt: string;
-    options: [string, string, string, string];
+    options: string[];
+    correctOptions: number[];
+    matchPairs: MatchPair[];
     correctOption: number;
     createdAt: string;
     updatedAt: string;
@@ -65,10 +69,15 @@ type AdminQuizGrade = {
     submissionCount: number;
 };
 
+type QuestionType = "standard" | "image" | "match" | "multiple";
+
 type QuestionFormState = {
+    type: QuestionType;
     prompt: string;
-    options: [string, string, string, string];
+    options: string[];
     correctOption: number;
+    correctOptions: number[];
+    matchPairs: MatchPair[];
 };
 
 const EMPTY_TICKET_FORM: TicketFormState = {
@@ -82,9 +91,12 @@ const EMPTY_TICKET_FORM: TicketFormState = {
 };
 
 const EMPTY_QUESTION: QuestionFormState = {
+    type: "standard",
     prompt: "",
     options: ["", "", "", ""],
     correctOption: 0,
+    correctOptions: [],
+    matchPairs: [],
 };
 
 export default function AdminPanel() {
@@ -415,9 +427,12 @@ export default function AdminPanel() {
         setQuestionBankError(null);
         setActiveQuestionBankId(question.id);
         setQuestionBankForm({
+            type: (question as any).type || "standard",
             prompt: question.prompt,
-            options: [...question.options] as [string, string, string, string],
+            options: Array.isArray(question.options) ? [...question.options] : ["", "", "", ""],
             correctOption: question.correctOption,
+            correctOptions: (question as any).correctOptions || [],
+            matchPairs: (question as any).matchPairs || [],
         });
         setIsEditQuestionBankModalOpen(true);
     }
@@ -1059,6 +1074,20 @@ export default function AdminPanel() {
                             )}
                         >
                             <form id="create-bank-question-form" onSubmit={createQuestionBankQuestionHandler} className="space-y-3">
+                                <div>
+                                    <label className="block text-xs font-medium text-zinc-600 dark:text-zinc-400 mb-1">Question Type</label>
+                                    <select
+                                        value={questionBankForm.type}
+                                        onChange={e => setQuestionBankForm(prev => ({ ...prev, type: e.target.value as QuestionType }))}
+                                        className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-zinc-700 dark:bg-zinc-950"
+                                    >
+                                        <option value="standard">Standard (single answer)</option>
+                                        <option value="image">Image (single answer + image)</option>
+                                        <option value="match">Match (drag images to titles)</option>
+                                        <option value="multiple">Multiple (multiple correct answers)</option>
+                                    </select>
+                                </div>
+                                {/* Question prompt (all types) */}
                                 <textarea
                                     value={questionBankForm.prompt}
                                     onChange={(e) => setQuestionBankForm((prev) => ({ ...prev, prompt: e.target.value }))}
@@ -1066,34 +1095,156 @@ export default function AdminPanel() {
                                     rows={3}
                                     className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-zinc-700 dark:bg-zinc-950"
                                 />
-                                <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
-                                    {questionBankForm.options.map((option, index) => (
-                                        <input
-                                            key={index}
-                                            value={option}
-                                            onChange={(e) => {
-                                                setQuestionBankForm((prev) => {
-                                                    const nextOptions = [...prev.options] as [string, string, string, string];
-                                                    nextOptions[index] = e.target.value;
-                                                    return { ...prev, options: nextOptions };
-                                                });
-                                            }}
-                                            placeholder={`Option ${index + 1}`}
+
+                                {/* Standard & Image: 4 options, single correct */}
+                                {(questionBankForm.type === 'standard' || questionBankForm.type === 'image') && (
+                                    <>
+                                        {/* Image upload for 'image' type */}
+                                        {questionBankForm.type === 'image' && (
+                                            <div className="mb-2">
+                                                <label className="block text-xs font-medium text-zinc-600 dark:text-zinc-400 mb-1">Image (PNG, optional)</label>
+                                                {/* TODO: Add image upload input and preview here */}
+                                                <input type="file" accept="image/png" />
+                                            </div>
+                                        )}
+                                        <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
+                                            {questionBankForm.options.map((option, index) => (
+                                                <input
+                                                    key={index}
+                                                    value={option}
+                                                    onChange={(e) => {
+                                                        setQuestionBankForm((prev) => {
+                                                            const nextOptions = [...prev.options] as [string, string, string, string];
+                                                            nextOptions[index] = e.target.value;
+                                                            return { ...prev, options: nextOptions };
+                                                        });
+                                                    }}
+                                                    placeholder={`Option ${index + 1}`}
+                                                    className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-zinc-700 dark:bg-zinc-950"
+                                                />
+                                            ))}
+                                        </div>
+                                        <select
+                                            value={questionBankForm.correctOption}
+                                            onChange={(e) => setQuestionBankForm((prev) => ({ ...prev, correctOption: Number(e.target.value) }))}
                                             className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-zinc-700 dark:bg-zinc-950"
-                                        />
-                                    ))}
-                                </div>
-                                <select
-                                    value={questionBankForm.correctOption}
-                                    onChange={(e) => setQuestionBankForm((prev) => ({ ...prev, correctOption: Number(e.target.value) }))}
-                                    className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-zinc-700 dark:bg-zinc-950"
-                                >
-                                    {questionBankForm.options.map((option, idx) => (
-                                        <option key={idx} value={idx}>
-                                            {option ? `Correct answer: ${option}` : `Correct answer: Option ${idx + 1}`}
-                                        </option>
-                                    ))}
-                                </select>
+                                        >
+                                            {questionBankForm.options.map((option, idx) => (
+                                                <option key={idx} value={idx}>
+                                                    {option ? `Correct answer: ${option}` : `Correct answer: Option ${idx + 1}`}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    </>
+                                )}
+
+                                {/* Multiple: dynamic options, checkboxes for correct answers */}
+                                {questionBankForm.type === 'multiple' && (
+                                    <div className="space-y-2">
+                                        <label className="block text-xs font-medium text-zinc-600 dark:text-zinc-400 mb-1">Answer Options</label>
+                                        {Array.isArray(questionBankForm.options) && questionBankForm.options.map((option, idx) => (
+                                            <div key={idx} className="flex items-center gap-2 mb-1">
+                                                <input
+                                                    type="checkbox"
+                                                    checked={Array.isArray(questionBankForm.correctOptions) ? questionBankForm.correctOptions.includes(idx) : false}
+                                                    onChange={e => {
+                                                        setQuestionBankForm(prev => {
+                                                            let correctOptions = Array.isArray(prev.correctOptions) ? [...prev.correctOptions] : [];
+                                                            if (e.target.checked) {
+                                                                if (!correctOptions.includes(idx)) correctOptions.push(idx);
+                                                            } else {
+                                                                correctOptions = correctOptions.filter(i => i !== idx);
+                                                            }
+                                                            return { ...prev, correctOptions };
+                                                        });
+                                                    }}
+                                                />
+                                                <input
+                                                    value={option}
+                                                    onChange={e => {
+                                                        setQuestionBankForm(prev => {
+                                                            const nextOptions = [...prev.options];
+                                                            nextOptions[idx] = e.target.value;
+                                                            return { ...prev, options: nextOptions };
+                                                        });
+                                                    }}
+                                                    placeholder={`Option ${idx + 1}`}
+                                                    className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-zinc-700 dark:bg-zinc-950"
+                                                />
+                                                <button
+                                                    type="button"
+                                                    className="text-xs text-red-500 px-2"
+                                                    onClick={() => {
+                                                        setQuestionBankForm(prev => {
+                                                            const nextOptions = prev.options.filter((_, i) => i !== idx);
+                                                            let correctOptions = Array.isArray(prev.correctOptions) ? prev.correctOptions.filter(i => i !== idx) : [];
+                                                            // Adjust indices after removal
+                                                            correctOptions = correctOptions.map(i => (i > idx ? i - 1 : i));
+                                                            return { ...prev, options: nextOptions, correctOptions };
+                                                        });
+                                                    }}
+                                                    disabled={questionBankForm.options.length <= 2}
+                                                >Remove</button>
+                                            </div>
+                                        ))}
+                                        <button
+                                            type="button"
+                                            className="rounded border border-zinc-300 px-2 py-1 text-xs font-medium mt-1"
+                                            onClick={() => {
+                                                setQuestionBankForm(prev => ({
+                                                    ...prev,
+                                                    options: [...prev.options, ''],
+                                                }));
+                                            }}
+                                        >Add Option</button>
+                                    </div>
+                                )}
+
+                                {/* Match: dynamic pairs (title + image), select for matching */}
+                                {questionBankForm.type === 'match' && (
+                                    <div className="space-y-2">
+                                        <label className="block text-xs font-medium text-zinc-600 dark:text-zinc-400 mb-1">Match Pairs</label>
+                                        {(Array.isArray(questionBankForm.matchPairs) ? questionBankForm.matchPairs : []).map((pair, idx) => (
+                                            <div key={idx} className="flex items-center gap-2 mb-1">
+                                                <input
+                                                    value={pair.title}
+                                                    onChange={e => {
+                                                        setQuestionBankForm(prev => {
+                                                            const nextPairs = [...prev.matchPairs];
+                                                            nextPairs[idx] = { ...nextPairs[idx], title: e.target.value };
+                                                            return { ...prev, matchPairs: nextPairs };
+                                                        });
+                                                    }}
+                                                    placeholder={`Title ${idx + 1}`}
+                                                    className="w-1/3 rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-zinc-700 dark:bg-zinc-950"
+                                                />
+                                                {/* Image upload placeholder */}
+                                                <input type="file" accept="image/png" className="w-1/3" />
+                                                <button
+                                                    type="button"
+                                                    className="text-xs text-red-500 px-2"
+                                                    onClick={() => {
+                                                        setQuestionBankForm(prev => {
+                                                            const nextPairs = prev.matchPairs.filter((_, i) => i !== idx);
+                                                            return { ...prev, matchPairs: nextPairs };
+                                                        });
+                                                    }}
+                                                    disabled={questionBankForm.matchPairs.length <= 2}
+                                                >Remove</button>
+                                            </div>
+                                        ))}
+                                        <button
+                                            type="button"
+                                            className="rounded border border-zinc-300 px-2 py-1 text-xs font-medium mt-1"
+                                            onClick={() => {
+                                                setQuestionBankForm(prev => ({
+                                                    ...prev,
+                                                    matchPairs: [...(prev.matchPairs || []), { title: '', imageId: null }],
+                                                }));
+                                            }}
+                                        >Add Pair</button>
+                                    </div>
+                                )}
                             </form>
                         </Modal>
 
