@@ -636,10 +636,11 @@ export default function AdminQuizEditor({ quizId }: { quizId: number }) {
                         onChange={(e) => setQuestionForm((prev) => ({ ...prev, correctOption: Number(e.target.value) }))}
                         className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-zinc-700 dark:bg-zinc-950"
                     >
-                        <option value={0}>Correct answer: Option 1</option>
-                        <option value={1}>Correct answer: Option 2</option>
-                        <option value={2}>Correct answer: Option 3</option>
-                        <option value={3}>Correct answer: Option 4</option>
+                        {questionForm.options.map((option, idx) => (
+                            <option key={idx} value={idx}>
+                                {`Correct answer: ${option.trim() ? option : `Option ${idx + 1}`}`}
+                            </option>
+                        ))}
                     </select>
                 </form>
             </Modal>
