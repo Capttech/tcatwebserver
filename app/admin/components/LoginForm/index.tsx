@@ -1,5 +1,6 @@
 "use client";
-import { FormEvent, useState } from "react";
+import VNRequest from '../../../hooks/VNRequest'
+import { SubmitEvent, useState } from "react";
 
 export default function AdminLoginForm() {
   const [username, setUsername] = useState("");
@@ -7,39 +8,24 @@ export default function AdminLoginForm() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  async function submit(e: FormEvent<HTMLFormElement>) {
+  async function submit(e: SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
     setLoading(true);
     setError(null);
-    try {
-      const res = await fetch('/api/admin/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        cache: 'no-store',
-        body: JSON.stringify({ username, password }),
-      });
 
-      let payload: any = null;
-      const contentType = res.headers.get('content-type') || '';
-
-      if (contentType.includes('application/json')) {
-        payload = await res.json().catch(() => null);
-      } else {
-        const text = await res.text().catch(() => '');
-        payload = text ? { error: text } : null;
+    VNRequest({
+      method: 'POST',
+      route: '/api/admin/login',
+      payload: { username, password }
+    }).then((response: { status: number, value: any }) => {
+      if (response.value && response.value.ok) {
+        window.location.reload()
       }
-
-      if (res.ok) {
-        window.location.reload();
-      } else {
-        setError(payload?.error || `Login failed (${res.status})`);
-      }
-    } catch (err: any) {
-      setError(err?.message ? `Network error: ${err.message}` : 'Network error');
-    } finally {
+    }).catch((response: { status: number, error: string }) => {
+      setError(response.error ? `Network error: ${response.error}` : 'Network error');
+    }).finally(() => {
       setLoading(false);
-    }
+    })
   }
 
   return (

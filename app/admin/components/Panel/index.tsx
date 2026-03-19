@@ -1,84 +1,9 @@
 "use client";
 import Link from "next/link";
-import { FormEvent, useCallback, useEffect, useState } from "react";
-import Modal from "../../components/Modal";
+import Modal from "../../../components/Modal";
+import { SubmitEvent, useCallback, useEffect, useState } from "react";
+import { TicketFormState, QuestionFormState, Ticket, AdminQuiz, AdminBankQuestion, AdminQuizGrade, TicketStatus, QuestionType } from "./types";
 
-type MatchPair = { title: string; imageId: number | null };
-
-type TicketStatus = "open" | "close";
-
-type Ticket = {
-    id: number;
-    teamLeader: string;
-    teamMembers: string;
-    completionDateTime: string;
-    status: TicketStatus;
-    subject: string;
-    breakDown: string;
-    resolution: string;
-    createdAt: string;
-    updatedAt: string;
-};
-
-type TicketFormState = {
-    teamLeader: string;
-    teamMembers: string;
-    completionDateTime: string;
-    status: TicketStatus;
-    subject: string;
-    breakDown: string;
-    resolution: string;
-};
-
-type AdminQuestion = {
-    id: number;
-    quizId: number;
-    prompt: string;
-    options: string[];
-    correctOptions: number[];
-    matchPairs: MatchPair[];
-    correctOption: number;
-    createdAt: string;
-    updatedAt: string;
-};
-
-type AdminQuiz = {
-    id: number;
-    title: string;
-    description: string;
-    quizCode: string;
-    durationMinutes: number;
-    createdAt: string;
-    updatedAt: string;
-    questions: AdminQuestion[];
-};
-
-type AdminBankQuestion = {
-    id: number;
-    prompt: string;
-    options: [string, string, string, string];
-    correctOption: number;
-    createdAt: string;
-    updatedAt: string;
-};
-
-type AdminQuizGrade = {
-    quizId: number;
-    title: string;
-    quizCode: string;
-    submissionCount: number;
-};
-
-type QuestionType = "standard" | "image" | "match" | "multiple";
-
-type QuestionFormState = {
-    type: QuestionType;
-    prompt: string;
-    options: string[];
-    correctOption: number;
-    correctOptions: number[];
-    matchPairs: MatchPair[];
-};
 
 const EMPTY_TICKET_FORM: TicketFormState = {
     teamLeader: "",
@@ -140,15 +65,16 @@ export default function AdminPanel() {
         setTicketsError(null);
 
         try {
-            const res = await fetch("/api/admin/tickets", {
+            const response = await fetch("/api/admin/tickets", {
                 method: "GET",
                 credentials: "include",
                 cache: "no-store",
             });
-            const body = await res.json().catch(() => null);
 
-            if (!res.ok) {
-                throw new Error(body?.error || `Failed to load tickets (${res.status})`);
+            const body = await response.json().catch(() => null);
+
+            if (!response.ok) {
+                throw new Error(body?.error || `Failed to load tickets (${response.status})`);
             }
 
             const nextTickets = Array.isArray(body?.tickets) ? body.tickets : [];
@@ -168,15 +94,16 @@ export default function AdminPanel() {
         setQuizzesLoading(true);
         setQuizzesError(null);
         try {
-            const res = await fetch("/api/admin/quizzes", {
+            const response = await fetch("/api/admin/quizzes", {
                 method: "GET",
                 credentials: "include",
                 cache: "no-store",
             });
-            const body = await res.json().catch(() => null);
 
-            if (!res.ok) {
-                throw new Error(body?.error || `Failed to load quizzes (${res.status})`);
+            const body = await response.json().catch(() => null);
+
+            if (!response.ok) {
+                throw new Error(body?.error || `Failed to load quizzes (${response.status})`);
             }
 
             const nextQuizzes = Array.isArray(body?.quizzes) ? body.quizzes : [];
@@ -197,15 +124,16 @@ export default function AdminPanel() {
         setQuestionBankError(null);
 
         try {
-            const res = await fetch("/api/admin/question-bank", {
+            const response = await fetch("/api/admin/question-bank", {
                 method: "GET",
                 credentials: "include",
                 cache: "no-store",
             });
-            const body = await res.json().catch(() => null);
 
-            if (!res.ok) {
-                throw new Error(body?.error || `Failed to load question bank (${res.status})`);
+            const body = await response.json().catch(() => null);
+
+            if (!response.ok) {
+                throw new Error(body?.error || `Failed to load question bank (${response.status})`);
             }
 
             const nextQuestions = Array.isArray(body?.questions) ? body.questions : [];
@@ -226,15 +154,16 @@ export default function AdminPanel() {
         setGradesError(null);
 
         try {
-            const res = await fetch("/api/admin/grades", {
+            const response = await fetch("/api/admin/grades", {
                 method: "GET",
                 credentials: "include",
                 cache: "no-store",
             });
-            const body = await res.json().catch(() => null);
 
-            if (!res.ok) {
-                throw new Error(body?.error || `Failed to load grades (${res.status})`);
+            const body = await response.json().catch(() => null);
+
+            if (!response.ok) {
+                throw new Error(body?.error || `Failed to load grades (${response.status})`);
             }
 
             const nextGrades = Array.isArray(body?.quizzes) ? body.quizzes : [];
@@ -272,7 +201,7 @@ export default function AdminPanel() {
         setIsCreateTicketModalOpen(true);
     }
 
-    async function createTicketHandler(e: FormEvent<HTMLFormElement>) {
+    async function createTicketHandler(e: SubmitEvent<HTMLFormElement>) {
         e.preventDefault();
 
         if (
@@ -288,7 +217,7 @@ export default function AdminPanel() {
         setTicketsError(null);
 
         try {
-            const res = await fetch("/api/admin/tickets", {
+            const response = await fetch("/api/admin/tickets", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 credentials: "include",
@@ -303,10 +232,10 @@ export default function AdminPanel() {
                     resolution: newTicket.resolution.trim(),
                 }),
             });
-            const body = await res.json().catch(() => null);
+            const body = await response.json().catch(() => null);
 
-            if (!res.ok) {
-                throw new Error(body?.error || `Failed to create ticket (${res.status})`);
+            if (!response.ok) {
+                throw new Error(body?.error || `Failed to create ticket (${response.status})`);
             }
 
             setIsCreateTicketModalOpen(false);
@@ -355,7 +284,7 @@ export default function AdminPanel() {
         setIsCreateQuizModalOpen(true);
     }
 
-    async function createQuizHandler(e: FormEvent<HTMLFormElement>) {
+    async function createQuizHandler(e: SubmitEvent<HTMLFormElement>) {
         e.preventDefault();
         const title = newQuizTitle.trim();
         const quizCode = newQuizCode.trim().toUpperCase();
@@ -437,7 +366,7 @@ export default function AdminPanel() {
         setIsEditQuestionBankModalOpen(true);
     }
 
-    async function createQuestionBankQuestionHandler(e: FormEvent<HTMLFormElement>) {
+    async function createQuestionBankQuestionHandler(e: SubmitEvent<HTMLFormElement>) {
         e.preventDefault();
         if (!validateQuestionForm(questionBankForm)) return;
 
@@ -471,7 +400,7 @@ export default function AdminPanel() {
         }
     }
 
-    async function saveQuestionBankQuestionHandler(e: FormEvent<HTMLFormElement>) {
+    async function saveQuestionBankQuestionHandler(e: SubmitEvent<HTMLFormElement>) {
         e.preventDefault();
         if (!activeQuestionBankId) return;
         if (!validateQuestionForm(questionBankForm)) return;

@@ -1,30 +1,27 @@
 import mysql from "@/lib/db";
-
-export enum TicketStatus {
-    OPEN = 'open',
-    IN_PROGRESS = 'in_progress',
-    RESOLVED = 'resolved',
-    CLOSED = 'closed',
-}
-
-export type Ticket = {
-    id: number;
-    subject: string;
-    breakDown: string;
-    resolution: string | null;
-    teamLeader: string;
-    teamMembers: string;
-    status: TicketStatus;
-    creationDate: string;
-    createdAt: string;
-    updatedAt: string;
-};
+import { Ticket, TicketStatus } from "./types";
 
 export async function listTickets(): Promise<Ticket[]> {
-    const [rows] = await mysql.query(
-        "SELECT * FROM tickets ORDER BY createdAt DESC"
-    );
+    const [rows] = await mysql.query("SELECT * FROM tickets ORDER BY createdAt DESC");
     return rows as Ticket[];
+}
+
+export function parseUpdateStatus(value: unknown): TicketStatus | null {
+    const text = String(value || '').toLowerCase();
+    if (text === 'open' || text === 'closed') return text as TicketStatus;
+    return null;
+}
+
+export function parseTicketId(value: string) {
+    const id = Number(value);
+    return Number.isInteger(id) && id > 0 ? id : null;
+}
+
+export function parseUniqueStatus(value: unknown): TicketStatus | undefined {
+    if (value === undefined) return undefined;
+    const text = String(value || '').toLowerCase();
+    if (text === 'open' || text === 'close') return text as TicketStatus;
+    return undefined;
 }
 
 export async function createTicket(input: {
@@ -35,6 +32,7 @@ export async function createTicket(input: {
     teamMembers: string;
     status?: TicketStatus;
     creationDate: string;
+    creationDateTime?: string;
 }): Promise<Ticket> {
     const now = new Date();
     const [_, meta] = await mysql.query(
@@ -48,7 +46,6 @@ export async function createTicket(input: {
             input.teamMembers,
             input.status || TicketStatus.OPEN,
             input.creationDate,
-            now,
             now,
         ]
     );

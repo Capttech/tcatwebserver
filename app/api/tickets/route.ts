@@ -1,47 +1,40 @@
-import { NextResponse } from 'next/server';
-import { createTicket, listTickets, TicketStatus } from '@/app/lib/ticketDb';
 
-// function parseStatus(value: unknown): TicketStatus | null {
-//     const text = String(value || '').toLowerCase();
-//     if (text === 'open' || text === 'close') return text;
-//     return null;
-// }
+import { NextResponse } from 'next/server';
+import { createTicket, listTickets, parseUpdateStatus } from './hooks';
 
 export async function GET() {
-    return NextResponse.json({ ok: false, error: 'Unavailable' }, { status: 503 });
-
-    // return NextResponse.json({ ok: true, tickets: listTickets() });
+    return NextResponse.json({ ok: true, tickets: listTickets() });
 }
 
 export async function POST(req: Request) {
-    return NextResponse.json({ ok: false, error: 'Unavailable' }, { status: 503 });
+    try {
+        const body = await req.json();
+        const teamLeader = String(body?.teamLeader || '').trim();
+        const teamMembers = String(body?.teamMembers || '').trim();
+        const creationDateTime = String(body?.creationDateTime || body?.completionDateTime || '').trim();
+        const status = parseUpdateStatus(body?.status);
+        const subject = String(body?.subject || '').trim();
+        const breakDown = String(body?.breakDown || '').trim();
+        const resolution = String(body?.resolution || '').trim();
 
-    // try {
-    //     const body = await req.json();
-    //     const teamLeader = String(body?.teamLeader || '').trim();
-    //     const teamMembers = String(body?.teamMembers || '').trim();
-    //     const creationDateTime = String(body?.creationDateTime || body?.completionDateTime || '').trim();
-    //     const status = parseStatus(body?.status);
-    //     const subject = String(body?.subject || '').trim();
-    //     const breakDown = String(body?.breakDown || '').trim();
-    //     const resolution = String(body?.resolution || '').trim();
+        if (!creationDateTime || !status || !subject || !breakDown) {
+            return NextResponse.json({ ok: false, error: 'Creation Date, Subject, and Break Down are required.' }, { status: 400 });
+        }
 
-    //     if (!creationDateTime || !status || !subject || !breakDown) {
-    //         return NextResponse.json({ ok: false, error: 'Creation Date, Subject, and Break Down are required.' }, { status: 400 });
-    //     }
+        const ticket = createTicket({
+            teamLeader,
+            teamMembers,
+            creationDate: creationDateTime,
+            status,
+            subject,
+            breakDown,
+            resolution,
+        });
 
-    //     const ticket = createTicket({
-    //         teamLeader,
-    //         teamMembers,
-    //         creationDateTime,
-    //         status,
-    //         subject,
-    //         breakDown,
-    //         resolution,
-    //     });
-
-    //     return NextResponse.json({ ok: true, ticket }, { status: 201 });
-    // } catch {
-    //     return NextResponse.json({ ok: false, error: 'Invalid request body.' }, { status: 400 });
-    // }
+        return NextResponse.json({ ok: true, ticket }, { status: 201 });
+    } catch {
+        return NextResponse.json({ ok: false, error: 'Invalid request body.' }, { status: 400 });
+    } finally {
+        console.log('POST /api/tickets called');
+    }
 }
