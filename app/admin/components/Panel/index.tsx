@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import Modal from "../../../components/Modal";
+import VNRequest from "@/app/hooks/VNRequest";
 import { SubmitEvent, useCallback, useEffect, useState } from "react";
 import { TicketFormState, QuestionFormState, Ticket, AdminQuiz, AdminBankQuestion, AdminQuizGrade, TicketStatus, QuestionType } from "./types";
 
@@ -64,26 +65,21 @@ export default function AdminPanel() {
         setTicketsLoading(true);
         setTicketsError(null);
 
-        try {
-            const response = await fetch("/api/admin/tickets", {
-                method: "GET",
-                credentials: "include",
-                cache: "no-store",
-            });
-
-            const body = await response.json().catch(() => null);
-
-            if (!response.ok) {
-                throw new Error(body?.error || `Failed to load tickets (${response.status})`);
+        VNRequest({
+            method: "GET",
+            route: "/api/admin/tickets",
+            payload: {}
+        }).then((response: { status: number, value: any }) => {
+            if (response.value && response.value.tickets) {
+                const nextTickets = Array.isArray(response.value.tickets) ? response.value.tickets : [];
+                setTickets(nextTickets);
             }
-
-            const nextTickets = Array.isArray(body?.tickets) ? body.tickets : [];
-            setTickets(nextTickets);
-        } catch (err: any) {
-            setTicketsError(err?.message || "Failed to load tickets.");
-        } finally {
+        }).catch((response: { status: number, error: string }) => {
+            setTicketsError(response.error || "Failed to load tickets.");
+            throw new Error(response.error || `Failed to load tickets (${response.status})`);
+        }).finally(() => {
             setTicketsLoading(false);
-        }
+        })
     }, []);
 
     useEffect(() => {
@@ -93,26 +89,22 @@ export default function AdminPanel() {
     const loadQuizzes = useCallback(async () => {
         setQuizzesLoading(true);
         setQuizzesError(null);
-        try {
-            const response = await fetch("/api/admin/quizzes", {
-                method: "GET",
-                credentials: "include",
-                cache: "no-store",
-            });
 
-            const body = await response.json().catch(() => null);
-
-            if (!response.ok) {
-                throw new Error(body?.error || `Failed to load quizzes (${response.status})`);
+        VNRequest({
+            method: "GET",
+            route: "/api/admin/quizzes",
+            payload: {}
+        }).then((response: { status: number, value: any }) => {
+            if (response.value && response.value.quizzes) {
+                const nextQuizzes = Array.isArray(response.value.quizzes) ? response.value.quizzes : [];
+                setQuizzes(nextQuizzes);
             }
-
-            const nextQuizzes = Array.isArray(body?.quizzes) ? body.quizzes : [];
-            setQuizzes(nextQuizzes);
-        } catch (err: any) {
-            setQuizzesError(err?.message || "Failed to load quizzes.");
-        } finally {
+        }).catch((response: { status: number, error: string }) => {
+            setQuizzesError(response.error || "Failed to load quizzes.");
+            throw new Error(response.error || `Failed to load quizzes (${response.status})`);
+        }).finally(() => {
             setQuizzesLoading(false);
-        }
+        })
     }, []);
 
     useEffect(() => {
@@ -123,26 +115,21 @@ export default function AdminPanel() {
         setQuestionBankLoading(true);
         setQuestionBankError(null);
 
-        try {
-            const response = await fetch("/api/admin/question-bank", {
-                method: "GET",
-                credentials: "include",
-                cache: "no-store",
-            });
-
-            const body = await response.json().catch(() => null);
-
-            if (!response.ok) {
-                throw new Error(body?.error || `Failed to load question bank (${response.status})`);
+        VNRequest({
+            method: "GET",
+            route: "/api/admin/question-bank",
+            payload: {}
+        }).then((response: { status: number, value: any }) => {
+            if (response.value && response.value.questions) {
+                const nextQuestions = Array.isArray(response.value.questions) ? response.value.questions : [];
+                setQuestionBank(nextQuestions);
             }
-
-            const nextQuestions = Array.isArray(body?.questions) ? body.questions : [];
-            setQuestionBank(nextQuestions);
-        } catch (err: any) {
-            setQuestionBankError(err?.message || "Failed to load question bank.");
-        } finally {
+        }).catch((response: { status: number, error: string }) => {
+            setQuestionBankError(response.error || "Failed to load question bank.");
+            throw new Error(response.error || `Failed to load question bank (${response.status})`);
+        }).finally(() => {
             setQuestionBankLoading(false);
-        }
+        })
     }, []);
 
     useEffect(() => {
@@ -153,26 +140,21 @@ export default function AdminPanel() {
         setGradesLoading(true);
         setGradesError(null);
 
-        try {
-            const response = await fetch("/api/admin/grades", {
-                method: "GET",
-                credentials: "include",
-                cache: "no-store",
-            });
-
-            const body = await response.json().catch(() => null);
-
-            if (!response.ok) {
-                throw new Error(body?.error || `Failed to load grades (${response.status})`);
+        VNRequest({
+            method: "GET",
+            route: "/api/admin/grades",
+            payload: {}
+        }).then((response: { status: number, value: any }) => {
+            if (response.value && response.value.quizzes) {
+                const nextGrades = Array.isArray(response.value.quizzes) ? response.value.quizzes : [];
+                setQuizGrades(nextGrades);
             }
-
-            const nextGrades = Array.isArray(body?.quizzes) ? body.quizzes : [];
-            setQuizGrades(nextGrades);
-        } catch (err: any) {
-            setGradesError(err?.message || "Failed to load grades.");
-        } finally {
+        }).catch((response: { status: number, error: string }) => {
+            setGradesError(response.error || "Failed to load grades.");
+            throw new Error(response.error || `Failed to load grades (${response.status})`);
+        }).finally(() => {
             setGradesLoading(false);
-        }
+        })
     }, []);
 
     useEffect(() => {
@@ -181,18 +163,18 @@ export default function AdminPanel() {
 
     async function logout() {
         setLoading(true);
-        try {
-            await fetch("/api/admin/logout", {
-                method: "POST",
-                credentials: "include",
-                cache: "no-store",
-            });
-        } finally {
-            try {
-                localStorage.removeItem("tcat_admin_public");
-            } catch { }
+        VNRequest({
+            method: "POST",
+            route: "/api/admin/logout",
+            payload: {}
+        }).then((response: { status: number, value: any }) => {
+            console.log('Success logout')
+        }).catch((response: { status: number, error: string }) => {
+            console.error('Error logging out')
+        }).finally(() => {
+            localStorage.removeItem("tcat_admin_public");
             window.location.reload();
-        }
+        })
     }
 
     function openCreateTicketModal() {
@@ -216,36 +198,28 @@ export default function AdminPanel() {
         setTicketActionBusy(true);
         setTicketsError(null);
 
-        try {
-            const response = await fetch("/api/admin/tickets", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                credentials: "include",
-                cache: "no-store",
-                body: JSON.stringify({
-                    teamLeader: newTicket.teamLeader.trim(),
-                    teamMembers: newTicket.teamMembers.trim(),
-                    completionDateTime: newTicket.completionDateTime,
-                    status: newTicket.status,
-                    subject: newTicket.subject.trim(),
-                    breakDown: newTicket.breakDown.trim(),
-                    resolution: newTicket.resolution.trim(),
-                }),
-            });
-            const body = await response.json().catch(() => null);
-
-            if (!response.ok) {
-                throw new Error(body?.error || `Failed to create ticket (${response.status})`);
+        VNRequest({
+            method: "POST",
+            route: "/api/admin/tickets",
+            payload: {
+                teamLeader: newTicket.teamLeader.trim(),
+                teamMembers: newTicket.teamMembers.trim(),
+                completionDateTime: newTicket.completionDateTime,
+                status: newTicket.status,
+                subject: newTicket.subject.trim(),
+                breakDown: newTicket.breakDown.trim(),
+                resolution: newTicket.resolution.trim(),
             }
-
+        }).then(async (response: { status: number, value: any }) => {
             setIsCreateTicketModalOpen(false);
             setNewTicket(EMPTY_TICKET_FORM);
             await loadTickets();
-        } catch (err: any) {
-            setTicketsError(err?.message || "Failed to create ticket.");
-        } finally {
+        }).catch((response: { status: number, error: string }) => {
+            setTicketsError(response.error || "Failed to create ticket.");
+            throw new Error(response.error || `Failed to create ticket (${response.status})`);
+        }).finally(() => {
             setTicketActionBusy(false);
-        }
+        })
     }
 
     async function deleteTicketHandler(ticketId: number) {
@@ -255,24 +229,18 @@ export default function AdminPanel() {
         setTicketActionBusy(true);
         setTicketsError(null);
 
-        try {
-            const res = await fetch(`/api/admin/tickets/${ticketId}`, {
-                method: "DELETE",
-                credentials: "include",
-                cache: "no-store",
-            });
-            const body = await res.json().catch(() => null);
-
-            if (!res.ok) {
-                throw new Error(body?.error || `Failed to delete ticket (${res.status})`);
-            }
-
+        VNRequest({
+            method: "DELETE",
+            route: `/api/admin/tickets/${ticketId}`,
+            payload: {}
+        }).then(async (response: { status: number, value: any }) => {
             await loadTickets();
-        } catch (err: any) {
-            setTicketsError(err?.message || "Failed to delete ticket.");
-        } finally {
+        }).catch((response: { status: number, error: string }) => {
+            setTicketsError(response.error || "Failed to delete ticket.");
+            throw new Error(response.error || `Failed to delete ticket (${response.status})`);
+        }).finally(() => {
             setTicketActionBusy(false);
-        }
+        })
     }
 
     function openCreateQuizModal() {
@@ -306,30 +274,28 @@ export default function AdminPanel() {
 
         setActionBusy(true);
         setActionError(null);
-        try {
-            const res = await fetch("/api/admin/quizzes", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                credentials: "include",
-                cache: "no-store",
-                body: JSON.stringify({ title, description: newQuizDescription.trim(), quizCode, durationMinutes }),
-            });
-            const body = await res.json().catch(() => null);
-            if (!res.ok) {
-                throw new Error(body?.error || `Failed to create quiz (${res.status})`);
-            }
 
+        VNRequest({
+            method: "POST",
+            route: "/api/admin/quizzes",
+            payload: {
+                title, description: newQuizDescription.trim(),
+                quizCode,
+                durationMinutes
+            }
+        }).then(async (response: { status: number, value: any }) => {
             setNewQuizTitle("");
             setNewQuizDescription("");
             setNewQuizCode("");
             setNewQuizDurationMinutes("30");
             setIsCreateQuizModalOpen(false);
             await Promise.all([loadQuizzes(), loadGrades()]);
-        } catch (err: any) {
-            setActionError(err?.message || "Failed to create quiz.");
-        } finally {
+        }).catch((response: { status: number, error: string }) => {
+            setActionError(response.error || "Failed to create quiz.");
+            throw new Error(response.error || `Failed to create quiz (${response.status})`);
+        }).finally(() => {
             setActionBusy(false);
-        }
+        })
     }
 
     function validateQuestionForm(form: QuestionFormState) {
@@ -372,32 +338,25 @@ export default function AdminPanel() {
 
         setQuestionBankBusy(true);
         setQuestionBankError(null);
-        try {
-            const res = await fetch("/api/admin/question-bank", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                credentials: "include",
-                cache: "no-store",
-                body: JSON.stringify({
-                    prompt: questionBankForm.prompt.trim(),
-                    options: questionBankForm.options.map((option) => option.trim()),
-                    correctOption: questionBankForm.correctOption,
-                }),
-            });
-            const body = await res.json().catch(() => null);
 
-            if (!res.ok) {
-                throw new Error(body?.error || `Failed to create question (${res.status})`);
+        VNRequest({
+            method: "POST",
+            route: "/api/admin/question-bank",
+            payload: {
+                prompt: questionBankForm.prompt.trim(),
+                options: questionBankForm.options.map((option) => option.trim()),
+                correctOption: questionBankForm.correctOption,
             }
-
+        }).then(async (response: { status: number, value: any }) => {
             setIsCreateQuestionBankModalOpen(false);
             setQuestionBankForm(EMPTY_QUESTION);
             await loadQuestionBank();
-        } catch (err: any) {
-            setQuestionBankError(err?.message || "Failed to create question.");
-        } finally {
+        }).catch((response: { status: number, error: string }) => {
+            setQuestionBankError(response.error || "Failed to create question.");
+            throw new Error(response.error || `Failed to create question (${response.status})`);
+        }).finally(() => {
             setQuestionBankBusy(false);
-        }
+        })
     }
 
     async function saveQuestionBankQuestionHandler(e: SubmitEvent<HTMLFormElement>) {
@@ -407,33 +366,26 @@ export default function AdminPanel() {
 
         setQuestionBankBusy(true);
         setQuestionBankError(null);
-        try {
-            const res = await fetch(`/api/admin/question-bank/${activeQuestionBankId}`, {
-                method: "PUT",
-                headers: { "Content-Type": "application/json" },
-                credentials: "include",
-                cache: "no-store",
-                body: JSON.stringify({
-                    prompt: questionBankForm.prompt.trim(),
-                    options: questionBankForm.options.map((option) => option.trim()),
-                    correctOption: questionBankForm.correctOption,
-                }),
-            });
-            const body = await res.json().catch(() => null);
 
-            if (!res.ok) {
-                throw new Error(body?.error || `Failed to update question (${res.status})`);
+        VNRequest({
+            method: "POST",
+            route: `/api/admin/question-bank/${activeQuestionBankId}`,
+            payload: {
+                prompt: questionBankForm.prompt.trim(),
+                options: questionBankForm.options.map((option) => option.trim()),
+                correctOption: questionBankForm.correctOption,
             }
-
+        }).then(async (response: { status: number, value: any }) => {
             setIsEditQuestionBankModalOpen(false);
             setActiveQuestionBankId(null);
             setQuestionBankForm(EMPTY_QUESTION);
             await loadQuestionBank();
-        } catch (err: any) {
-            setQuestionBankError(err?.message || "Failed to update question.");
-        } finally {
+        }).catch((response: { status: number, error: string }) => {
+            setQuestionBankError(response.error || "Failed to update question.");
+            throw new Error(response.error || `Failed to update question (${response.status})`);
+        }).finally(() => {
             setQuestionBankBusy(false);
-        }
+        })
     }
 
     async function deleteQuestionBankQuestionHandler(questionId: number) {
@@ -441,24 +393,19 @@ export default function AdminPanel() {
 
         setQuestionBankBusy(true);
         setQuestionBankError(null);
-        try {
-            const res = await fetch(`/api/admin/question-bank/${questionId}`, {
-                method: "DELETE",
-                credentials: "include",
-                cache: "no-store",
-            });
-            const body = await res.json().catch(() => null);
 
-            if (!res.ok) {
-                throw new Error(body?.error || `Failed to delete question (${res.status})`);
-            }
-
+        VNRequest({
+            method: "DELETE",
+            route: `/api/admin/question-bank/${questionId}`,
+            payload: {}
+        }).then(async (response: { status: number, value: any }) => {
             await loadQuestionBank();
-        } catch (err: any) {
-            setQuestionBankError(err?.message || "Failed to delete question.");
-        } finally {
+        }).catch((response: { status: number, error: string }) => {
+            setQuestionBankError(response.error || "Failed to delete question.");
+            throw new Error(response.error || `Failed to delete question (${response.status})`);
+        }).finally(() => {
             setQuestionBankBusy(false);
-        }
+        })
     }
 
     function exportCSV() {
@@ -476,13 +423,11 @@ export default function AdminPanel() {
         ];
 
         const rows = tickets.map((ticket) =>
-            header
-                .map((column) => {
-                    const value = (ticket as any)[column] ?? "";
-                    const text = String(value).replaceAll('"', '""');
-                    return `"${text}"`;
-                })
-                .join(",")
+            header.map((column) => {
+                const value = (ticket as any)[column] ?? "";
+                const text = String(value).replaceAll('"', '""');
+                return `"${text}"`;
+            }).join(",")
         );
 
         const csv = [header.join(","), ...rows].join("\n");
