@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation';
-import AdminQuizEditor from '@/app/components/AdminQuizEditor';
+// import AdminQuizEditor from '@/app/components/AdminQuizEditor';
 import PageWrapper from '@/app/components/PageWrapper';
 import { isAdminAuthenticated } from '@/app/lib/adminAuth';
 
@@ -20,7 +20,8 @@ export default async function AdminQuizQuickEditPage({ params }: { params: Promi
 
     return (
         <PageWrapper>
-            <AdminQuizEditor quizId={parsedQuizId} />
+            Hold
+            {/* <AdminQuizEditor quizId={parsedQuizId} /> */}
         </PageWrapper>
     );
 }
