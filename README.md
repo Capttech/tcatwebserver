@@ -14,9 +14,23 @@ pnpm dev
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:80](http://localhost:80) with your browser to see the result.
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+
+## Admin setup
+
+Create a `.env` file with the following variables:
+
+```bash
+ADMIN_USER=your-admin-username
+ADMIN_PASS=your-admin-password
+ADMIN_SESSION_SECRET=replace-with-a-long-random-secret
+```
+
+- Admin sessions are signed and stored in an `HttpOnly` cookie.
+- Admin quiz + question data is persisted to `data/admin-db.json`.
+- Admin quiz APIs are protected and require a valid admin session.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 

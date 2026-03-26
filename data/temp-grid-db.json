@@ -1,0 +1,209 @@
+{
+  "blocks": [
+    {
+      "vlan": "20",
+      "switchName": "3",
+      "portNumber": "15"
+    },
+    {
+      "vlan": "20",
+      "switchName": "1",
+      "portNumber": "25"
+    },
+    {
+      "vlan": "20",
+      "switchName": "1",
+      "portNumber": "16"
+    },
+    {
+      "vlan": "20",
+      "switchName": "1",
+      "portNumber": "26"
+    },
+    {
+      "vlan": "20",
+      "switchName": "2",
+      "portNumber": "22"
+    },
+    {
+      "vlan": "70",
+      "switchName": "2",
+      "portNumber": "40"
+    },
+    {
+      "vlan": "0",
+      "switchName": "0",
+      "portNumber": "0"
+    },
+    {
+      "vlan": "20",
+      "switchName": "3",
+      "portNumber": "33"
+    },
+    {
+      "vlan": "20",
+      "switchName": "4",
+      "portNumber": "29"
+    },
+    {
+      "vlan": "20",
+      "switchName": "3",
+      "portNumber": "36"
+    },
+    {
+      "vlan": "20",
+      "switchName": "3",
+      "portNumber": "23"
+    },
+    {
+      "vlan": "20",
+      "switchName": "4",
+      "portNumber": "24"
+    },
+    {
+      "vlan": "",
+      "switchName": "",
+      "portNumber": ""
+    },
+    {
+      "vlan": "40",
+      "switchName": "2",
+      "portNumber": "39"
+    },
+    {
+      "vlan": "20",
+      "switchName": "4",
+      "portNumber": "33"
+    },
+    {
+      "vlan": "20",
+      "switchName": "4",
+      "portNumber": "31"
+    },
+    {
+      "vlan": "",
+      "switchName": "",
+      "portNumber": ""
+    },
+    {
+      "vlan": "20",
+      "switchName": "3",
+      "portNumber": "29"
+    },
+    {
+      "vlan": "20",
+      "switchName": "3",
+      "portNumber": "26"
+    },
+    {
+      "vlan": "20",
+      "switchName": "3",
+      "portNumber": "31"
+    },
+    {
+      "vlan": "",
+      "switchName": "",
+      "portNumber": ""
+    },
+    {
+      "vlan": "20",
+      "switchName": "3",
+      "portNumber": "25"
+    },
+    {
+      "vlan": "20",
+      "switchName": "3",
+      "portNumber": "21"
+    },
+    {
+      "vlan": "20",
+      "switchName": "3",
+      "portNumber": "27"
+    },
+    {
+      "vlan": "20",
+      "switchName": "4",
+      "portNumber": "25"
+    },
+    {
+      "vlan": "20",
+      "switchName": "4",
+      "portNumber": "27"
+    },
+    {
+      "vlan": "20",
+      "switchName": "3",
+      "portNumber": "28"
+    },
+    {
+      "vlan": "20",
+      "switchName": "4",
+      "portNumber": "18"
+    },
+    {
+      "vlan": "20",
+      "switchName": "3",
+      "portNumber": "32"
+    },
+    {
+      "vlan": "20",
+      "switchName": "3",
+      "portNumber": "34"
+    },
+    {
+      "vlan": "0",
+      "switchName": "0",
+      "portNumber": "0"
+    },
+    {
+      "vlan": "20",
+      "switchName": "4",
+      "portNumber": "34"
+    },
+    {
+      "vlan": "20",
+      "switchName": "2",
+      "portNumber": "37"
+    },
+    {
+      "vlan": "20",
+      "switchName": "4",
+      "portNumber": "14"
+    },
+    {
+      "vlan": "20",
+      "switchName": "4",
+      "portNumber": "16"
+    },
+    {
+      "vlan": "70",
+      "switchName": "3",
+      "portNumber": "40"
+    },
+    {
+      "vlan": "20",
+      "switchName": "3",
+      "portNumber": "30"
+    },
+    {
+      "vlan": "70",
+      "switchName": "3",
+      "portNumber": "42"
+    },
+    {
+      "vlan": "70",
+      "switchName": "4",
+      "portNumber": "40"
+    },
+    {
+      "vlan": "20",
+      "switchName": "2",
+      "portNumber": "16"
+    },
+    {
+      "vlan": "20",
+      "switchName": "1",
+      "portNumber": "14"
+    }
+  ]
+}

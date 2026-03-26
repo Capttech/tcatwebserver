@@ -28,10 +28,10 @@ export default function ClientLoader() {
       }
     };
 
-    window.fetch = async (...args: any[]) => {
+    window.fetch = async (...args: Parameters<typeof fetch>) => {
       increment();
       try {
-        const res = await (origFetch.current as any)(...args);
+        const res = await (origFetch.current as typeof fetch).apply(window, args);
         return res;
       } catch (err) {
         throw err;
