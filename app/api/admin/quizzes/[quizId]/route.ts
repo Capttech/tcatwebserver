@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { deleteQuiz, getQuiz, updateQuiz } from '@/app/lib/adminDB';
+// import { deleteQuiz, getQuiz, updateQuiz } from '@/app/lib/adminDB';
 import { isAdminAuthenticated } from '@/app/lib/adminAuth';
 
 export const runtime = 'nodejs';
@@ -23,12 +23,12 @@ export async function GET(_: Request, ctx: { params: Promise<{ quizId: string }>
         return NextResponse.json({ ok: false, error: 'Invalid quiz id.' }, { status: 400 });
     }
 
-    const quiz = getQuiz(id);
-    if (!quiz) {
-        return NextResponse.json({ ok: false, error: 'Quiz not found.' }, { status: 404 });
-    }
+    // const quiz = getQuiz(id);
+    // if (!quiz) {
+    //     return NextResponse.json({ ok: false, error: 'Quiz not found.' }, { status: 404 });
+    // }
 
-    return NextResponse.json({ ok: true, quiz });
+    // return NextResponse.json({ ok: true, quiz });
 }
 
 export async function PUT(req: Request, ctx: { params: Promise<{ quizId: string }> }) {
@@ -66,12 +66,12 @@ export async function PUT(req: Request, ctx: { params: Promise<{ quizId: string 
             return NextResponse.json({ ok: false, error: 'Quiz duration must be a whole number greater than 0.' }, { status: 400 });
         }
 
-        const quiz = updateQuiz(id, { title, description, quizCode, durationMinutes });
-        if (!quiz) {
-            return NextResponse.json({ ok: false, error: 'Quiz not found.' }, { status: 404 });
-        }
+        // const quiz = updateQuiz(id, { title, description, quizCode, durationMinutes });
+        // if (!quiz) {
+        //     return NextResponse.json({ ok: false, error: 'Quiz not found.' }, { status: 404 });
+        // }
 
-        return NextResponse.json({ ok: true, quiz });
+        // return NextResponse.json({ ok: true, quiz });
     } catch (error: any) {
         if (error?.message === 'Quiz code already exists.') {
             return NextResponse.json({ ok: false, error: error.message }, { status: 409 });
@@ -92,10 +92,10 @@ export async function DELETE(_: Request, ctx: { params: Promise<{ quizId: string
         return NextResponse.json({ ok: false, error: 'Invalid quiz id.' }, { status: 400 });
     }
 
-    const deleted = deleteQuiz(id);
-    if (!deleted) {
-        return NextResponse.json({ ok: false, error: 'Quiz not found.' }, { status: 404 });
-    }
+    // const deleted = deleteQuiz(id);
+    // if (!deleted) {
+    //     return NextResponse.json({ ok: false, error: 'Quiz not found.' }, { status: 404 });
+    // }
 
-    return NextResponse.json({ ok: true });
+    // return NextResponse.json({ ok: true });
 }

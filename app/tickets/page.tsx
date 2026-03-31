@@ -1,7 +1,7 @@
 import Link from "next/link";
 import PageWrapper from "../components/PageWrapper";
 import SiteHeader from "../components/SiteHeader";
-import { listTickets } from "../lib/ticketDb";
+// import { listTickets } from "../lib/ticketDb";
 
 function formatCreatedDate(value: string) {
     const date = new Date(value);
@@ -20,7 +20,8 @@ function getStatusLabel(status: "open" | "close") {
 }
 
 export default function TicketsPage() {
-    const tickets = listTickets();
+    // const tickets = listTickets();
+    const tickets = [];
 
     return (
         <PageWrapper>
